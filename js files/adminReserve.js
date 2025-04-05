@@ -1,44 +1,49 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const spaceSelect = document.getElementById('space-select');
-    const dateSelect = document.getElementById('date-select');
-    const timeSelect = document.getElementById('time-select');
-    const slotSelect = document.getElementById('slot-select');
-    const studentName = document.getElementById('name'); // FOR ADMIN RESERVE
-    const userID = document.getElementById('id');
-    const reservationForm = document.getElementById('reservation-form');
+    const dateInput = document.getElementById('date');
+    const timeInput = document.getElementById('time');
+    const studentID = document.getElementById('id');
+    const submitButton = document.getElementById('submit');
+    const reservationForm = document.getElementById('reservation-form'); // Optional: if you wrap form around submit
     const successMessage = document.getElementById('success-message');
-   
-    const urlParams = new URLSearchParams(window.location.search);
-    const initialSpace = urlParams.get('space');
-    const initialDate = urlParams.get('date');
-    const initialTime = urlParams.get('time');
-    const initialSlotId = urlParams.get('slotId');
-    const initialName = urlParams.get('userName'); // FOR ADMIN RESERVE
-    const initialUserId = urlParams.get('userId');
 
-    
-    spaceSelect.textContent = initialSpace || 'Not selected';
-    dateSelect.textContent = initialDate ? new Date(initialDate).toLocaleDateString() : 'Not selected';
-    timeSelect.textContent = initialTime || 'Not selected';
-    slotSelect.textContent = initialSlotId ? `Slot ${initialSlotId}` : 'Not selected';
-    studentName.textContent = initialName || 'Anonymous';
-    userID.textContent = initialUserId;
+    // Ensure current time is always shown (this matches the current UI behavior)
+    function updateCurrentDateTime() {
+        const now = new Date();
+        const todayStr = now.toISOString().split('T')[0];
+        const hours = now.getHours().toString().padStart(2, '0');
+        const minutes = now.getMinutes().toString().padStart(2, '0');
+        const timeStr = `${hours}:${minutes}`;
 
-    async function submitReservation(event) {
-        event.preventDefault();
+        if (dateInput) dateInput.value = todayStr;
+        if (timeInput) timeInput.value = timeStr;
+    }
 
-        successMessage.style.display = 'none';
+    updateCurrentDateTime();
+    setInterval(updateCurrentDateTime, 60000); // update every minute
 
-        const anonymous = document.getElementById('anonymous').checked;
+    // Submit logic
+    submitButton?.addEventListener('click', async () => {
+        successMessage?.style?.display = 'none';
+
+        const userId = studentID.value;
+        const anonymous = document.getElementById('anonymous')?.checked || false;
+
+        if (!window.selectedReservation) {
+            alert("Please select a parking slot first.");
+            return;
+        }
+
+        if (!userId) {
+            alert("Please enter a valid ID number.");
+            return;
+        }
 
         const reservationData = {
-            space: initialSpace,
-            date: initialDate,
-            time: initialTime,
-            slotId: initialSlotId,
-            userName: initialName,
-            anonymous,
-            userId: initialUserId
+            ...window.selectedReservation,
+            userId,
+            date: dateInput.value,
+            time: timeInput.value,
+            anonymous
         };
 
         try {
@@ -51,22 +56,22 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             if (response.ok) {
-                successMessage.style.display = 'block';
-                reservationForm.reset();
+                successMessage?.style?.display = 'block';
+                studentID.value = '';
+                submitButton.style.display = 'none';
             } else {
                 const errorData = await response.json();
-                console.error('Error:', errorData.message);
+                alert("Error: " + errorData.message);
             }
         } catch (error) {
-            console.error('Error:', error);
+            console.error('Error submitting reservation:', error);
+            alert("Something went wrong.");
         }
-    }
+    });
 
-    function goBack() {
+    // Cancel button
+    document.getElementById('cancel')?.addEventListener('click', () => {
         const loggedInUser = JSON.parse(sessionStorage.getItem('loggedInUser'));
-        window.location.href = 'adminMenu';
-    }
-
-    reservationForm.addEventListener('submit', submitReservation);
-    document.getElementById('backButton').addEventListener('click', goBack);
+        window.location.href = (loggedInUser?.role === 'student') ? 'mainMenu' : 'adminMenu';
+    });
 });

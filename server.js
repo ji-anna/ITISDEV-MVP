@@ -186,6 +186,15 @@ app.get('/space-availability', async (req, res) => {
     }
 });
 
+app.get('/api/usersById', async (req, res) => {
+    const userId = req.query.userId;
+    try {
+        const users = await User.find({ userId });
+        res.json(users);
+    } catch (error) {
+        res.status(500).send('Internal Server Error');
+    }
+});
 
 app.get('/searchuser', async (req, res) => {
     try {

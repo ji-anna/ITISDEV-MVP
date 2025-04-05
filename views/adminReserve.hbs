@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Parking SpaceAvailability</title>
+    <title>Parking SpaceAvailability - Admin</title>
     <link rel="stylesheet" href="css styles/spaceavail.css">
 </head>
 <body>
@@ -34,18 +34,16 @@
 
     <div class="input-group">
         <div class="date-select">
-            <label for="date">Select date:</label>
-            <input type="date" id="date" onchange="loadAvailability()">
+            <label for="date">Date:</label>
+            <input type="text" class="datetime-field" id="date" readonly placeholder="yyyy-mm-dd">
         </div>
-    
+
         <div class="time-select">
-            <label for="time">Select time:</label>
-            <select id="time" onchange="loadAvailability()">
-                {{#each times}}
-                    <option value="{{this.value}}">{{this.display}}</option>
-                {{/each}}
-            </select>
+            <label for="time">Time:</label>
+            <input type="text" class="datetime-field" id="time" readonly placeholder="hh:mm">
         </div>
+
+
     </div>
 
     <label for="id">ID number:</label>
