@@ -177,7 +177,7 @@ th {
 }
 
 tr:hover {
-    background-color: #2d7814;
+    background-color: #ffffff;
 }
 
 label {
@@ -219,7 +219,7 @@ button{
 
 button:hover{
     background-color: #ffffff;
-    color: #2d7814;
+    color: #009F4F;
     border-color: #2d7814;
     cursor: pointer;
 }
