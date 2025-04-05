@@ -1,5 +1,4 @@
-@import url('https://fonts.cdnfonts.com/css/octuple-max');
-@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@700&display=swap');
 
 * {
     margin: 0;
@@ -12,8 +11,8 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-color: #fffedc;
-    font-family: 'Octuple max', sans-serif;
+    background-color: #ffffff;
+    font-family: 'Inter', sans-serif;
     margin: 100px;
     padding: 50px;
 }
@@ -25,7 +24,7 @@ body {
 .container {
     width: 80%;
     max-width: 800px;
-    background-color:  #ecd2fd;
+    background-color:  #045f01;
     padding: 20px;
     border-radius: 20px;
     display: flex;
@@ -39,35 +38,35 @@ table {
     width: 100%;
     border-collapse: collapse;
     font-family: 'Nunito', sans-serif;
-    background-color: #f8b5ca;
+    background-color: #ffffff;
 }
 
 th, td {
-    border: solid 2px #bc5978;
+    border: solid 2px #045f01;
     padding: 8px;
     text-align: left;
 }
 
 th {
-    background-color: #ecd2fd;
+    background-color: #045f01;
 }
 
 tr:hover {
-    background-color: #d2a8ef;
+    background-color: #c0c9c0;
 }
 
 h1 {
     text-align: center;
     margin-bottom: 20px;
     font-family: 'Octuple max', sans-serif;
-    text-shadow: 0 0 10px rgba(255, 234, 234, 0.1); 
-    color:#6b4880;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.1); 
+    color:#ffffff;
 }
 
 input[type="text"]{
     margin-bottom: 15px;
     padding: 10px;
-    border: 2px solid #6b4880;
+    border: 2px solid #ffffff;
     border-radius: 10px;
     font-size: 1rem;
     outline: none;
@@ -86,15 +85,14 @@ input[type="text"]{
     margin-top: 10px;
     padding-bottom: 3.5%;
     padding: 10px;
-    background-color: #cad8f2; 
-    border: solid 2px #6b4880;
+    background-color: #ffffff; 
+    border: solid 2px #ffffff;
     border-radius: 15px;
     justify-content: center;
     align-items: center;
-    color: #6b4880;
+    color: #000000;
     font-family: 'Octuple max', sans-serif;
     font-size: 1.5rem;
-    box-shadow: 0 0 10px rgba(190, 145, 206, 0.566);
 }
 
 .button:hover {
@@ -106,18 +104,17 @@ input[type="text"]{
 
 /* FOR NAVIGATION BAR */
 header {
+    background-color:#045f01;
     color: #ffffff; 
     display: flex;
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    height: 20%;
-    background-color: #ca618d;
+    height: 10%;
     position: fixed;
     top: 0;
     left: 0;
     z-index: 1000;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     
 }
 
@@ -159,5 +156,9 @@ header {
 }
 
 .nav-links a:hover {
-    color: #6b4880;
+    color: #50a135;
+}
+.selected-seat {
+    background-color:#2d7814;
+    border: 2px solid #2d7814;
 }
