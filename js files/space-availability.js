@@ -1,14 +1,15 @@
 function generateSlots(rows, cols) {
     const slots = [];
     let id = 1;
-    for (let row = 1; row <= rows; row++) { 
-        for (let col = 1; col <= cols; col++) { 
+    for (let row = 1; row <= rows; row++) {
+        for (let col = 1; col <= cols; col++) {
             slots.push({ id: id, available: true, user: null, reservationDate: null, slot: `Slot ${id}` });
-            id++; 
+            id++;
         }
     }
     return slots;
-}  
+}
+
 const slots = {
     C: generateSlots(5, 5),
     D: generateSlots(5, 5),
@@ -17,17 +18,21 @@ const slots = {
 
 async function loadAvailability() {
     const space = document.getElementById('spaces').value;
-    const selectedDate = new Date(document.getElementById('date').value);
-    const selectedTime = document.getElementById('time').value;
+    if (!space) return;
+
+    const now = new Date();
+    const selectedDate = now.toISOString().split('T')[0];
+    const selectedTime = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
+
     const availabilityDiv = document.getElementById('space-availability');
     availabilityDiv.innerHTML = '';
     availabilityDiv.classList.add('space-availability');
 
-    
-    const response = await fetch(`/api/reservations?space=${space}&date=${selectedDate.toISOString().split('T')[0]}&time=${selectedTime}`);
+    const response = await fetch(`/api/reservations?space=${space}&date=${selectedDate}&time=${selectedTime}`);
     const reservations = await response.json();
 
-    
+    const loggedInUser = JSON.parse(sessionStorage.getItem('loggedInUser'));
+
     slots[space].forEach(slot => {
         const slotDiv = document.createElement('div');
         slotDiv.className = 'slot';
@@ -36,15 +41,10 @@ async function loadAvailability() {
 
         if (reservation) {
             const userLink = document.createElement('a');
-
-            if (reservation.anonymous) {
-                userLink.textContent = 'Anonymous';
-            } else {
+            userLink.textContent = reservation.anonymous ? 'Anonymous' : reservation.userName;
+            if (!reservation.anonymous) {
                 userLink.href = `/userprofile/${encodeURIComponent(reservation.userName)}`;
-                userLink.textContent = reservation.userName;
-            
             }
-
             slotDiv.appendChild(userLink);
             slotDiv.classList.add('space-reserved');
         } else {
@@ -53,10 +53,16 @@ async function loadAvailability() {
 
             slotDiv.textContent = 'Available';
             slotDiv.classList.add('space-available');
-            slotDiv.addEventListener('click', () => {
-                handleReservationLink(space, selectedDate.toISOString(), selectedTime, slot.id);
-                highlightSlot(slotDiv);
-            });
+
+            if (loggedInUser.role === 'technician') {
+                slotDiv.addEventListener('click', () => {
+                    handleReservationLink(space, selectedDate, selectedTime, slot.id);
+                    highlightSlot(slotDiv);
+                });
+            } else if (loggedInUser.role === 'student') {
+                slotDiv.classList.add('disabled-slot');
+                slotDiv.style.cursor = 'not-allowed';
+            }
         }
 
         const slotName = document.createElement('div');
@@ -70,106 +76,85 @@ async function loadAvailability() {
 async function handleReservationLink(space, date, time, slotId) {
     const loggedInUser = JSON.parse(sessionStorage.getItem('loggedInUser'));
 
-    if (loggedInUser.role === 'student') {
-        const url = `reserve?space=${space}&date=${date}&time=${time}&slotId=${slotId}`;
-        window.location.href = url;
-    } else if (loggedInUser.role === 'technician') {
-        let studentName = document.getElementById('name').value;
-         studentName = formatName(studentName);
-        let userID = document.getElementById('userId').value;
-        userID = userID;
-        
+    if (loggedInUser.role === 'technician') {
+        const studentName = formatName(document.getElementById('name')?.value || '');
+        const userID = document.getElementById('id')?.value || '';
+
+        if (!userID || userID.length !== 8 || isNaN(userID)) {
+            alert('Please enter a valid 8-digit ID number.');
+            return;
+        }
+
         const isValidUser = await checkUserInDatabase(userID);
         if (!isValidUser) {
             alert('The entered user ID does not exist.');
             return;
         }
-        
-        const submitButton = document.getElementById('submit');
-        submitButton.style.display = 'block';
-        submitButton.onclick = () => {
-            const url = `adminReserveDetails?space=${space}&date=${date}&time=${time}&slotId=${slotId}&userName=${encodeURIComponent(studentName)}`;
-            window.location.href = url;
+
+        window.selectedReservation = {
+            space,
+            date,
+            time,
+            slotId,
+            userName: studentName,
+            userId: userID
         };
+
+        document.getElementById('submit').style.display = 'inline-block';
     }
 }
 
 function formatName(name) {
     return name.split(' ')
-               .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-               .join(' ');
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+        .join(' ');
 }
 
-
-function highlightSlot(selectedSlotDiv) {
-    
-    const allSlots = document.querySelectorAll('.slot');
-    allSlots.forEach(slot => slot.classList.remove('selected-slot'));
-
-    
-    selectedSlotDiv.classList.add('selected-slot');
-}
-
-async function checkUserInDatabase(userName) {
-    const response = await fetch(`/api/users?name=${encodeURIComponent(userName)}`);
-    const users = await response.json();
-    return users.length > 0;
-}
-
-function isSameDateTime(reservationDate, selectedDate, selectedTime) {
-    const formattedReservationDate = new Date(reservationDate);
-    const formattedSelectedDate = new Date(selectedDate);
-    const formattedSelectedTime = new Date(`2000-01-01T${selectedTime}`);
-
-    return (
-        formattedReservationDate.getFullYear() === formattedSelectedDate.getFullYear() &&
-        formattedReservationDate.getMonth() === formattedSelectedDate.getMonth() &&
-        formattedReservationDate.getDate() === formattedSelectedDate.getDate() &&
-        formattedReservationDate.getHours() === formattedSelectedTime.getHours() &&
-        formattedReservationDate.getMinutes() === formattedSelectedTime.getMinutes()
-    );
-}
-
-function updateAvailability() {
-    loadAvailability();
-}
-
-function generateTimeOptions() {
-    const select = document.getElementById('time');
-    select.innerHTML = ''; 
-
-    for (let hour = 9; hour <= 15; hour++) {
-        for (let minute = 0; minute <= 30; minute += 30) {
-            const option = document.createElement('option');
-            const time = `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
-            option.text = time;
-            option.value = time;
-            select.add(option);
-        }
+async function checkUserInDatabase(userId) {
+    try {
+        const response = await fetch(`/api/usersById?userId=${encodeURIComponent(userId)}`);
+        const users = await response.json();
+        return users.length > 0;
+    } catch (err) {
+        console.error('Error checking user:', err);
+        return false;
     }
 }
 
-document.addEventListener('DOMContentLoaded', generateTimeOptions);
-loadAvailability();
-setInterval(updateAvailability, 60000);
+function highlightSlot(selectedSlotDiv) {
+    const allSlots = document.querySelectorAll('.slot');
+    allSlots.forEach(slot => slot.classList.remove('selected-slot'));
+    selectedSlotDiv.classList.add('selected-slot');
+}
 
-document.getElementById("cancel").addEventListener("click", function() {
-    const loggedInUser = JSON.parse(sessionStorage.getItem('loggedInUser'));
-    window.location.href = (loggedInUser.role === 'student') ? 'mainMenu' : 'adminMenu';
-});
+function updateDateTimeDisplay() {
+    const now = new Date();
+    const todayStr = now.toISOString().split('T')[0];
+    const timeStr = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
 
-document.addEventListener('DOMContentLoaded', function() {
-    generateTimeOptions();
-    loadAvailability();
-    setInterval(updateAvailability, 60000);
+    const dateInput = document.getElementById('date');
+    const timeInput = document.getElementById('time');
 
-    document.getElementById("cancel").addEventListener("click", function() {
+    if (dateInput) dateInput.value = todayStr;
+    if (timeInput) timeInput.value = timeStr;
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const spaceDropdown = document.getElementById('spaces');
+    updateDateTimeDisplay();
+
+    spaceDropdown?.addEventListener('change', () => {
+        updateDateTimeDisplay();
+        loadAvailability();
+    });
+
+    setInterval(() => {
+        updateDateTimeDisplay();
+        loadAvailability();
+    }, 60000);
+
+    document.getElementById("cancel").addEventListener("click", function () {
         const loggedInUser = JSON.parse(sessionStorage.getItem('loggedInUser'));
         window.location.href = (loggedInUser.role === 'student') ? 'mainMenu' : 'adminMenu';
     });
-});
-
-document.addEventListener('DOMContentLoaded', function() {
-    const today = new Date().toISOString().split('T')[0];
-    document.getElementById('date').setAttribute('min', today);
 });
