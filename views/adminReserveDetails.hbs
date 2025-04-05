@@ -27,15 +27,14 @@
         <h1>{{reservationTitle}}</h1>
 
         <div id="reservation-details">
-            <p>{{selectSpaceText}} <span id="space-select"></span></p>
-            <p>{{selectDateText}} <span id="date-select"></span></p>
-            <p>{{selectTimeText}} <span id="time-select"></span></p>
-            <p>{{selectSlotText}} <span id="slot-select"></span></p>
-            <p>{{StudentName}} <span id="name"></span></p>
+            <p>Space: {{space}}</p>
+            <p>Date: {{date}}</p>
+            <p>Time: {{time}}</p>
+            <p>Slot ID: {{slotId}}</p>
         </div>
 
         <div id="reservation-form-container">
-            <form id="reservation-form">
+            <form id="reservation-form" method="POST" action="/submitReservation" >
 
                 <input type="checkbox" id="anonymous" name="anonymous">
                 <label for="anonymous">{{reserveAnonymouslyText}}</label>

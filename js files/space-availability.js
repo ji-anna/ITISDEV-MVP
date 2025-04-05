@@ -41,7 +41,7 @@ async function loadAvailability() {
 
         if (reservation) {
             const userLink = document.createElement('a');
-            userLink.textContent = reservation.anonymous ? 'Anonymous' : reservation.userName;
+            userLink.textContent = reservation.anonymous ? 'Anonymous' : reservation.userID;
             if (!reservation.anonymous) {
                 userLink.href = `/userprofile/${encodeURIComponent(reservation.userName)}`;
             }
@@ -91,6 +91,7 @@ async function handleReservationLink(space, date, time, slotId) {
             return;
         }
 
+        // Prepare data for the reservation
         window.selectedReservation = {
             space,
             date,
@@ -100,7 +101,8 @@ async function handleReservationLink(space, date, time, slotId) {
             userId: userID
         };
 
-        document.getElementById('submit').style.display = 'inline-block';
+        // Redirect to the details page
+        window.location.href = `/adminReserveDetails?space=${space}&date=${date}&time=${time}&slotId=${slotId}`;
     }
 }
 

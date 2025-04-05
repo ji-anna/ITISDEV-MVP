@@ -22,22 +22,24 @@ document.addEventListener('DOMContentLoaded', () => {
     setInterval(updateCurrentDateTime, 60000); // update every minute
 
     // Submit logic
+    submitButton = 'some value';  // This would trigger the error
+
     submitButton?.addEventListener('click', async () => {
         successMessage?.style?.display = 'none';
-
+    
         const userId = studentID.value;
         const anonymous = document.getElementById('anonymous')?.checked || false;
-
+    
         if (!window.selectedReservation) {
             alert("Please select a parking slot first.");
             return;
         }
-
+    
         if (!userId) {
             alert("Please enter a valid ID number.");
             return;
         }
-
+    
         const reservationData = {
             ...window.selectedReservation,
             userId,
@@ -45,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
             time: timeInput.value,
             anonymous
         };
-
+    
         try {
             const response = await fetch('/submit-admin-reservation', {
                 method: 'POST',
@@ -54,7 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 },
                 body: JSON.stringify(reservationData),
             });
-
+    
             if (response.ok) {
                 successMessage?.style?.display = 'block';
                 studentID.value = '';
@@ -68,7 +70,8 @@ document.addEventListener('DOMContentLoaded', () => {
             alert("Something went wrong.");
         }
     });
-
+    
+    document.getElementById('backButton').addEventListener('click', goBack);
     // Cancel button
     document.getElementById('cancel')?.addEventListener('click', () => {
         const loggedInUser = JSON.parse(sessionStorage.getItem('loggedInUser'));

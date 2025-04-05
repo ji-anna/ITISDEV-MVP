@@ -103,27 +103,30 @@ app.get('/reserve', isAuthenticated, async (req, res) => {
     }
 });
 
-app.get('/adminReserveDetails', isAuthenticated, async (req, res) => {
-    try {
-        const spaces = await Space.find().lean();
-        res.render('adminReserveDetails', {
-            title: 'Reserve Parking Slot',
-            reservationTitle: 'Reservation for Your Parking Space',
-            selectSpaceText: 'Select Floor:',
-            selectDateText: 'Select Date:',
-            selectTimeText: 'Select Time:',
-            selectSlotText: 'Select Slot:',
-            studentName: 'Student Name:',
-            reserveSlotText: 'Reserve Slot',
-            goBackText: 'Go Back',
-            successMessageText: 'Reservation successful!',
-            spaces: spaces.map(space => ({ value: space.name, name: space.name }))
-        });
-    } catch (error) {
-        console.error('Error fetching spaces:', error);
-        res.status(500).json({ message: 'Internal Server Error' });
-    }
+// In your server.js or routes.js
+app.post('/adminReserveDetails', (req, res) => {
+    const { space, date, time, slotId } = req.body; // Capture the data
+    res.render('adminReserveDetails', {
+        title: 'Parking Space Availability - Admin',
+        space,
+        date,
+        time,
+        slotId
+    });
 });
+
+// In your server.js
+app.get('/adminReserveDetails', (req, res) => {
+    const { space, date, time, slotId } = req.query;
+    res.render('adminReserveDetails', {
+        title: 'Parking Space Availability - Admin',
+        space,
+        date,
+        time,
+        slotId
+    });
+});
+
 
 app.get('/editreservations', async (req, res) => {
     try {
