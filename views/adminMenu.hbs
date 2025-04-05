@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Parking System Main Menu</title>
+    <link rel="stylesheet" href="css styles/menu.css">
+</head>
+
+<body>
+    <div class="container">
+        <center>
+            <div class="logo"><img src="assets/logogreen.png" class="logo-img" alt="DLSU Logo" />
+                
+            </div>
+
+
+                <form method="get" action="/adminReserve">
+                    <button class="image-btn" type="submit">RESERVE A SLOT</button></button>
+                </form>
+
+                <form method="get" action="/adminSearchUser">
+                    <button class="image-btn" type="submit">VIEW RESERVATIONS</button>
+                </form>
+
+
+            <div class="login-register">
+                <nav>
+                    <form method="post" action="/landingPage">
+                        <button class="login-button" id="logoutButton" type="submit">Logout</button>
+                    </form>
+                </nav>
+
+            </div>
+        </center>
+    </div>
+
+    <script src="js files/main.js"></script>
+</body>
+
+</html>

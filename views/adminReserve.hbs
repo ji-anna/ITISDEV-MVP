@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Parking SpaceAvailability</title>
+    <link rel="stylesheet" href="css styles/adminspaceavail.css">
+</head>
+<body>
+
+<header>
+    <nav class="navbar-container">
+        <div class="logo-container">
+            <img src="assets/logowhite.PNG" alt="Logo">
+        </div>
+        <ul class="nav-links">
+            <li><a href="/adminMenu">Home</a></li>
+            <li><a href="/adminSearchUser">Search user</a></li>
+            <li><a href="/adminProfile">Profile</a></li>
+            <li><a href="/" id= "logoutButton">Logout</a></li>
+        </ul>
+    </nav>
+</header>
+
+<div class="container">
+    <h1>Parking Space Availability</h1>
+
+    <div>
+        <label for="spaces">Choose a slot:</label>
+        <select id="spaces" onchange="loadAvailability()">
+            {{#each spaces}}
+                <option value="{{this.name}}">{{this.location}}</option>
+            {{/each}}
+        </select>
+    </div>
+
+    <div class="input-group">
+        <div class="date-select">
+            <label for="date">Select date:</label>
+            <input type="date" id="date" onchange="loadAvailability()">
+        </div>
+    
+        <div class="time-select">
+            <label for="time">Select time:</label>
+            <select id="time" onchange="loadAvailability()">
+                {{#each times}}
+                    <option value="{{this.value}}">{{this.display}}</option>
+                {{/each}}
+            </select>
+        </div>
+    </div>
+
+    <label for="id">ID number:</label>
+    <input type="text" id="id" required="true">
+
+    <div id="space-availability" class="space-availability">
+       
+    </div>
+
+    <div class="button-grp">
+        <button type="button" class="button" id="submit" style="display:none;">Submit</button>
+        <button type="button" class="button" id="cancel">Cancel</button>
+    </div>
+</div>
+
+<script src="js files/space-availability.js"></script>
+<script src="js files/adminReserve.js"></script>
+<script src="/js files/main.js"></script>
+</body>
+</html>

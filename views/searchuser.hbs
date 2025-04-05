@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Users List</title>
+    <link rel="stylesheet" href="css styles/userlist.css">
+</head>
+
+<body>
+
+    <header>
+        <nav class="navbar-container">
+            <div class="logo-container">
+                <img src="assets\logowhite.PNG">
+            </div>
+            <ul class="nav-links">
+                <li><a href="/mainMenu">Home</a></li>
+                <li><a href="/space-availability">View Slots</a></li>
+                <li><a href="/searchuser">Search user</a></li>
+                <li><a href="/profilepage">Profile</a></li>
+                <li><a href="/" id="logoutButton">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+
+        <h1>Users List</h1>
+        <input type="text" id="search" placeholder="Search users by name">
+        <table id="user-list">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Department</th>
+                </tr>
+            </thead>
+            <tbody id="user-table-body">
+                {{#users}}
+                <tr>
+                    <td>{{name}}</td>
+                    <td>{{email}}</td>
+                    <td>{{role}}</td>
+                    <td>{{department}}</td>
+                </tr>
+                {{/users}}
+            </tbody>
+        </table>
+
+        <div class="button-grp">
+            <button type="button" class="button" id="cancel">cancel</button>
+        </div>
+
+    </div>
+
+    <script src="js files/searchUsers.js"></script>
+    <script src="/js files/main.js"></script>
+</body>
+
+</html>

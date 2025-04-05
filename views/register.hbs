@@ -1,0 +1,58 @@
+<!-- views/register.hbs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Register to E. Razon Parking</title>
+    <link rel="stylesheet" href="css styles/register.css">
+</head>
+<body>
+    <div class="container">
+        <div class="logo-container">
+            <div class="box">
+                <div class="in-box">
+                    <img src="assets/dlsu logo.PNG" >
+                </div>
+            </div>
+        </div>
+
+        <div class="form-container">
+            <h1>REGISTER USER</h1>
+            <form id="registerForm" action="/submit-registration" method="POST" enctype="multipart/form-data">
+                <label for="userId">User ID:</label>
+                <input type="text" id="userId" name="userId" required>
+
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" required>
+
+                <label for="role">Role:</label>
+                <select id="role" name="role" required>
+                    <option value="" disabled selected>Select your role</option>
+                    <option value="student">Student</option>
+                    <option value="technician">Lab Technician</option>
+                </select>
+
+                <label for="department">Department:</label>
+                <input type="text" id="department" name="department" required>
+
+                <label for="image">Profile Image:</label>
+                <input type="file" id="image" name="image">
+
+                <div class="button-grp">
+                    <button type="submit" class="button">Register</button>
+                    <button type="button" class="button" id="cancel">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="js files/main.js"></script>
+    <script src="js files/cancelBtn.js"></script>
+</body>
+</html>

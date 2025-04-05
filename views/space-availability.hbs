@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Parking Space Availability</title>
+    <link rel="stylesheet" href="css styles/spaceavail.css">
+</head>
+
+<body>
+    <header>
+        <nav class="navbar-container">
+            <div class="logo-container">
+                <img src="assets\logowhite.PNG">
+            </div>
+            <ul class="nav-links">
+                <li><a href="/mainMenu">Home</a></li>
+                <li><a href="/space-availability">View Slots</a></li>
+                <li><a href="/searchuser">Search user</a></li>
+                <li><a href="/profilepage">Profile</a></li>
+                <li><a href="/" id="logoutButton">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        <h1>Parking Availability</h1>
+
+        <div>
+            <label for="spaces">Choose a parking slot:</label>
+            <select id="spaces" onchange="loadAvailability()">
+                {{#each spaces}}
+                <option value="{{this.name}}">{{this.location}}</option>
+                {{/each}}
+            </select>
+        </div>
+
+        <div class="input-group">
+            <div class="date-select">
+                <label for="date">Select date:</label>
+                <input type="date" id="date" onchange="loadAvailability()">
+            </div>
+
+            <div class="time-select">
+                <label for="time">Select time:</label>
+                <select id="time" onchange="loadAvailability()">
+                    {{#each times}}
+                    <option value="{{this.value}}">{{this.display}}</option>
+                    {{/each}}
+                </select>
+            </div>
+        </div>
+
+        <div id="space-availability" class="space-availability">s
+            
+        </div>
+
+        <div class="button-grp">
+            <button type="button" class="button" id="cancel">Cancel</button>
+        </div>
+    </div>
+
+    <script src="js files/space-availability.js"></script>
+    <script src="js files/reserve.js"></script>
+    <script src="/js files/main.js"></script>
+</body>
+
+</html>

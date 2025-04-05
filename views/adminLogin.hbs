@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Admin Login | E. Razon Parking</title>
+  <link rel="stylesheet" href="css styles/login.css" />
+</head>
+<body>
+  <div class="login-wrapper">
+    <div class="login-frame">
+      <div class="login-box">
+
+        <img class="logo-1" src="assets/dlsu logo.png" alt="MyDLSU Logo" />
+        <img class="logo-2" src="assets/logogreen.png" alt="DLSU Logo" />
+        <div class="page-title">ADMIN LOGIN</div>
+        <div class="login-section">
+          <div class="login-form-container">
+            <form id="adminLoginForm" class="form">
+
+              <div class="form-group">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" id="email" name="email" required class="form-input" placeholder="admin@dlsu.edu.ph" />
+              </div>
+
+              <div class="form-group">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" id="password" name="password" required class="form-input" />
+              </div>
+
+              <div class="checkbox-group">
+                <input type="checkbox" id="rememberMe" name="rememberMe" />
+                <label for="rememberMe" class="checkbox-label">Remember me</label>
+              </div>
+
+              <div class="button-group">
+                <button type="submit" class="btn btn-login">Login</button>
+                <button type="button" id="cancel" class="btn btn-cancel">Cancel</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script src="js files/adminLogin.js"></script>
+  <script src="js files/cancelBtn.js"></script>
+</body>
+</html>

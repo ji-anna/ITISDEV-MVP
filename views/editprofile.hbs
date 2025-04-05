@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Profile</title>
+    <link rel="stylesheet" href="css styles/profile.css">
+</head>
+
+<body>
+    <header>
+        <nav class="navbar-container">
+            <div class="logo-container">
+                <img src="assets/logowhite.PNG">
+            </div>
+        </nav>
+    </header>
+
+    <div class="sidebar">
+        <h2>Menu</h2>
+        <ul>
+            <li><a href="#">Profile</a></li>
+            <li><a href="#">Reservations</a></li>
+        </ul>
+    </div>
+    <div class="profile-card">
+        <h1>Edit User Profile</h1>
+        <div class="profile-image">
+            <img id="profileImage" src="assets/default.jpg" alt="User Photo">
+        </div>
+        <div class="profile-details">
+            <div>
+                <label>Name: </label>
+                <span id="profileName">{{name}}</span>
+            </div>
+            <div>
+                <label>Email: </label>
+                <span id="profileEmail">{{email}}</span>
+                <button class="edit-button" onclick="editField('profileEmail')">Edit</button>
+                <button class="save-button" style="display:none;" onclick="saveChanges('profileEmail')">Save</button>
+            </div>
+            <div>
+                <label>Role: </label>
+                <span id="profileRole">{{role}}</span>
+
+            </div>
+            <div>
+                <label>Department: </label>
+                <span id="profileDepartment">{{department}}</span>
+                <button class="edit-button" onclick="editField('profileDepartment')">Edit</button>
+                <button class="save-button" style="display:none;"
+                    onclick="saveChanges('profileDepartment')">Save</button>
+            </div>
+            <div>
+                <label>Description: </label>
+                <span id="profileDescription">{{description}}</span>
+                <button class="edit-button" onclick="editField('profileDescription')">Edit</button>
+                <button class="save-button" style="display:none;"
+                    onclick="saveChanges('profileDescription')">Save</button>
+            </div>
+
+            <div class="file-input-container">
+                <label for="image">Profile Image:</label>
+                <input type="file" id="image" name="image">
+            </div>
+        </div>
+
+        <button id="editButton" class="button">Save All Changes</button>
+        <button id="cancelButton" class="button">Cancel Editing</button>
+    </div>
+    <script src="js files/profile.js"></script>
+</body>
+
+</html>

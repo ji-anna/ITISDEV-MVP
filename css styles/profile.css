@@ -1,0 +1,301 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@700&display=swap');
+
+body {
+    font-family: 'Inter', sans-serif;
+    margin: 100px;
+    padding: 50px;
+    display: flex;
+    background-color: #ffffff;
+}
+
+.sidebar {
+    width: 200px;
+    background-color: #2d7814;
+    color: white;
+    height: auto;
+    padding-top: 20px;
+    border-radius: 10px;
+}
+
+.sidebar h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-family: 'Inter', sans-serif;
+    color: #2d7814;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar ul li {
+    padding: 10px;
+    text-align: center;
+}
+
+input{
+    width: 250px;
+    padding: 10px;
+    border: 2px solid #2d7814;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-family: 'Inter', sans-serif;
+    outline: none;
+    margin-bottom: 5px;
+}
+
+.sidebar ul li a {
+    color: white;
+    text-decoration: none;
+    display: block;
+}
+
+.sidebar ul li a:hover {
+    background-color: #009F4F;
+}
+
+.profile-card {
+    margin: 20px;
+    padding: 20px;
+    background-color: #f4f4f4;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+    flex-grow: 1;
+}
+
+.profile-card h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-family: 'Inter', sans-serif;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.1); 
+    color:#116341;
+}
+
+.profile-image {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.profile-image img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: solid 4px #116341;
+}
+
+.profile-details {
+    margin-bottom: 20px;
+}
+
+.profile-details div {
+    margin-bottom: 10px;
+}
+
+#editButton{
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background-color: #ffffff; 
+    border: solid 2px #2d7814;
+    border-radius: 15px;
+    justify-content: center;
+    align-items: center;
+    color: #2d7814;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#cancelButton{
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background-color: #ffffff; 
+    border: solid 2px #2d7814;
+    border-radius: 15px;
+    justify-content: center;
+    align-items: center;
+    color: #2d7814;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#editButton:hover{
+    background-color: #ffffff;
+    color: #009F4F;
+    border-color: #2d7814;
+    cursor: pointer;
+}
+
+#cancelButton:hover{
+    background-color: #ffffff;
+    color: #009F4F;
+    border-color: #2d7814;
+    cursor: pointer;
+}
+
+#deleteUserButton {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background-color: #ffffff; 
+    border: solid 2px #2d7814;
+    border-radius: 15px;
+    justify-content: center;
+    align-items: center;
+    color: #2d7814;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#deleteUserButton:hover {
+    background-color: #ffffff;
+    color: #009F4F;
+    border-color: #2d7814;
+    cursor: pointer;
+}
+
+
+.table-container {
+    margin-top: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    border: solid 2px #2d7814;
+    padding: 8px;
+    text-align: left;
+}
+
+th {
+    background-color: #2d7814;
+}
+
+tr:hover {
+    background-color: #2d7814;
+}
+
+label {
+    margin-bottom: 5px;
+    color: #2d7814;
+    font-weight: bold;
+    font-family: 'Inter', sans-serif;
+}
+
+.button{
+    width: calc(48% - 4px);;
+    margin-bottom: 10px;
+    padding-bottom: 3.5%;
+    padding-top: 3.5%;
+    background-color: #ffffff; 
+    border: solid 2px #2d7814;
+    border-radius: 15px;
+    justify-content: center;
+    align-items: center;
+    color: #2d7814;
+    font-family: 'Inter', sans-serif;
+    font-size: 1rem;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.566);
+}
+
+button{
+    width: auto;
+    margin-bottom: 10px;
+    background-color: #ffffff; 
+    border: solid 2px #2d7814;
+    border-radius: 15px;
+    justify-content: center;
+    align-items: center;
+    color: #2d7814;
+    font-family: 'Nunito', sans-serif;
+    font-size: 1rem;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.566);
+}
+
+button:hover{
+    background-color: #ffffff;
+    color: #2d7814;
+    border-color: #2d7814;
+    cursor: pointer;
+}
+
+.button-grp{
+    display: flex;
+    flex-direction: column;
+    width: 70%;
+    align-items: center;
+}
+
+
+.button:hover {
+    background-color: #2d7814;
+    color: #ffffff;
+    border-color: #ffffff;
+    cursor: pointer;
+}
+
+/* FOR NAVIGATION BAR */
+header {
+    background-color:#045f01;; 
+    color: #ffffff; 
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: 10%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    
+}
+
+.navbar-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.logo-container {
+    flex: 1.5;
+    display: flex;
+    padding: 20px;
+    max-width: 100%;
+    height: 100%;
+}
+
+.logo-container img {
+    width: 200px;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+}
+
+.nav-links li {
+    margin-left: 20px;
+}
+
+.nav-links a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 1rem;
+    transition: color 0.3s;
+}
+
+.nav-links a:hover {
+    color: #50a135;
+}
+.selected-seat {
+    background-color:#2d7814;
+    border: 2px solid #2d7814;
+}

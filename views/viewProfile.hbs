@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>{{name}}'s Profile</title>
+    <link rel="stylesheet" href="/css styles/profile.css">
+</head>
+
+<body>
+    <header>
+        <nav class="navbar-container">
+            <div class="logo-container">
+                <img src="/assets/logowhite.PNG">
+            </div>
+            <ul class="nav-links">
+                <li><a href="/mainMenu">Home</a></li>
+                <li><a href="/space-availability">View Slots</a></li>
+                <li><a href="/searchuser">Search user</a></li>
+                <li><a href="/profilepage">Profile</a></li>
+                <li><a href="/" id="logoutButton">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="profile-card">
+        <h1>{{name}}'s Profile</h1>
+        <div class="profile-image">
+            <img id="profileImage" src="{{profileImg}}" alt="Profile Photo">
+        </div>
+
+        <div class="profile-details">
+            <div>
+                <label>Name: </label>
+                <span>{{name}}</span>
+            </div>
+            <div>
+                <label>Email: </label>
+                <span>{{email}}</span>
+            </div>
+            <div>
+                <label>Role: </label>
+                <span>{{role}}</span>
+            </div>
+            <div>
+                <label>Department: </label>
+                <span>{{department}}</span>
+            </div>
+            <div>
+                <label>Description: </label>
+                <span>{{description}}</span>
+            </div>
+        </div>
+        <center>
+            <div class="button-grp">
+                <button onclick="window.location.href = '/searchuser';" class="button">Back to Search</button>
+            </div>
+        </center>
+    </div>
+    <script src="/js/files/main.js"></script>
+</body>
+
+</html>

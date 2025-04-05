@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Edit Reservation</title>
+    <link rel="stylesheet" href="css styles/editreservation.css">
+</head>
+
+<body>
+    <header>
+        <nav class="navbar-container">
+            <div class="logo-container">
+                <img src="assets\logowhite.PNG">
+            </div>
+            <ul class="nav-links">
+                <li><a href="/mainMenu">Home</a></li>
+                <li><a href="/space-availability">View Slots</a></li>
+                <li><a href="/searchuser">Search user</a></li>
+                <li><a href="/profilepage">Profile</a></li>
+                <li><a href="/" id="logoutButton">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        <h1>Edit Reservation</h1>
+
+        <form id="editReservationForm">
+            <div class="input-group">
+                <label for="space">Space:</label>
+                <select id="space" name="space">
+                    {{#each spaces}}
+                    <option value="{{this.name}}">{{this.location}}</option>
+                    {{/each}}
+                </select>
+            </div>
+            <div class="input-group">
+                <label for="date">Date:</label>
+                <input type="date" id="date" name="date" value="{{reservation.date}}">
+            </div>
+            <div class="input-group">
+                <label for="time">Time:</label>
+                <select id="time" name="time">
+
+                </select>
+            </div>
+            <div class="input-group">
+                <label for="slotId">Slot ID:</label>
+                <input type="text" id="slotId" name="slotId" value="{{reservation.slotId}}">
+            </div>
+            <div class="input-group">
+                <label for="anonymous">Anonymous:</label>
+                <input type="checkbox" id="anonymous" name="anonymous" {{#if reservation.anonymous}}checked{{/if}}>
+            </div>
+            <button class="button" type="submit">Update Reservation</button>
+            <button class="button" type="button" id="cancelButton">Cancel</button>
+        </form>
+    </div>
+    <script src="js files/space-availability.js"></script>
+    <script src="js files/editreservations.js"></script>
+    <script src="/js files/main.js"></script>
+</body>
+
+</html>

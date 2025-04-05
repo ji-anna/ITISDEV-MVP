@@ -1,0 +1,90 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: rgba(17, 17, 17, 0.6);
+}
+
+.container {
+  z-index: 1;
+  background-color: rgba(255, 255, 255, 0.95);
+  border-radius: 16px;
+  padding: 40px;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  text-align: center;
+}
+
+
+.logo {
+    width: 200px;
+    margin-bottom: 20px;
+}
+
+.logo-img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    border-radius: 15px;
+}
+
+
+.image-btn {
+    width: 100%;
+  padding: 14px;
+  margin-bottom: 20px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 16px;
+  color: white;
+  background-color: #009F4F;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.image-btn:hover {
+    background-color: #007b3a;
+}
+
+
+.login-register {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.login-button,
+.register-button {
+    width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 16px;
+  color: white;
+  background-color: #009F4F;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.login-button:hover,
+.register-button:hover {
+    background-color: #007b3a;
+}

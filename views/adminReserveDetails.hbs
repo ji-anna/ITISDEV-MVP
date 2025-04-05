@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>{{title}}</title>
+    <link rel="stylesheet" href="css styles/adminreserve.css">
+</head>
+
+<body>
+
+    <header>
+        <nav class="navbar-container">
+            <div class="logo-container">
+                <img src="assets\logowhite.png">
+            </div>
+            <ul class="nav-links">
+                <li><a href="/adminMenu">Home</a></li>
+                <li><a href="/adminreserve">Reserve</a></li>
+                <li><a href="/adminSearchUser">Search user</a></li>
+                <li><a href="/adminProfile">Profile</a></li>
+                <li><a href="/" id="logoutButton">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        <h1>{{reservationTitle}}</h1>
+
+        <div id="reservation-details">
+            <p>{{selectSpaceText}} <span id="space-select"></span></p>
+            <p>{{selectDateText}} <span id="date-select"></span></p>
+            <p>{{selectTimeText}} <span id="time-select"></span></p>
+            <p>{{selectSlotText}} <span id="slot-select"></span></p>
+            <p>{{StudentName}} <span id="name"></span></p>
+        </div>
+
+        <div id="reservation-form-container">
+            <form id="reservation-form">
+
+                <input type="checkbox" id="anonymous" name="anonymous">
+                <label for="anonymous">{{reserveAnonymouslyText}}</label>
+
+                <div class="button-grp">
+                    <button type="submit" class="button">{{reserveSlotText}}</button>
+                    <button type="button" id="backButton" class="button">{{goBackText}}</button>
+                </div>
+            </form>
+        </div>
+
+        <div id="success-message" style="display: none;">
+            {{successMessageText}}
+        </div>
+    </div>
+
+    <script src="js files/adminReserve.js"></script>
+    <script src="/js files/main.js"></script>
+</body>
+
+</html>
