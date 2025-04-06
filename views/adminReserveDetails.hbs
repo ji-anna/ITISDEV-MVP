@@ -1,58 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <title>{{title}}</title>
     <link rel="stylesheet" href="css styles/adminreserve.css">
 </head>
-
 <body>
 
-    <header>
-        <nav class="navbar-container">
-            <div class="logo-container">
-                <img src="assets\logowhite.png">
-            </div>
-            <ul class="nav-links">
-                <li><a href="/adminMenu">Home</a></li>
-                <li><a href="/adminreserve">Reserve</a></li>
-                <li><a href="/adminSearchUser">Search user</a></li>
-                <li><a href="/adminProfile">Profile</a></li>
-                <li><a href="/" id="logoutButton">Logout</a></li>
-            </ul>
-        </nav>
-    </header>
-
-    <div class="container">
-        <h1>{{reservationTitle}}</h1>
-
-        <div id="reservation-details">
-            <p>Space: {{space}}</p>
-            <p>Date: {{date}}</p>
-            <p>Time: {{time}}</p>
-            <p>Slot ID: {{slotId}}</p>
+<header>
+    <nav class="navbar-container">
+        <div class="logo-container">
+            <img src="assets/logowhite.png">
         </div>
+        <ul class="nav-links">
+            <li><a href="/adminMenu">Home</a></li>
+            <li><a href="/adminreserve">Reserve</a></li>
+            <li><a href="/adminSearchUser">Search user</a></li>
+            <li><a href="/adminProfile">Profile</a></li>
+            <li><a href="/" id="logoutButton">Logout</a></li>
+        </ul>
+    </nav>
+</header>
 
-        <div id="reservation-form-container">
-            <form id="reservation-form" method="POST" action="/submitReservation" >
+<div class="container">
+    <h1>{{reservationTitle}}</h1>
 
-                <input type="checkbox" id="anonymous" name="anonymous">
-                <label for="anonymous">{{reserveAnonymouslyText}}</label>
-
-                <div class="button-grp">
-                    <button type="submit" class="button">{{reserveSlotText}}</button>
-                    <button type="button" id="backButton" class="button">{{goBackText}}</button>
-                </div>
-            </form>
-        </div>
-
-        <div id="success-message" style="display: none;">
-            {{successMessageText}}
-        </div>
+    <div id="reservation-details">
+        <p>Space: {{space}}</p>
+        <p>Date: {{date}}</p>
+        <p>Time: {{time}}</p>
+        <p>Slot ID: {{slotId}}</p>
     </div>
 
-    <script src="js files/adminReserve.js"></script>
-    <script src="/js files/main.js"></script>
-</body>
+    <div id="reservation-form-container">
+        <form id="reservation-form" method="POST" action="/submit-admin-reservation'">
+            <input type="checkbox" id="anonymous" name="anonymous">
+            <label for="anonymous">{{#if reserveAnonymouslyText}}{{reserveAnonymouslyText}}{{else}}Reserve Anonymously{{/if}}</label>
 
+            <div class="button-grp">
+                <button type="submit" class="button">{{#if reserveSlotText}}{{reserveSlotText}}{{else}}Reserve Slot{{/if}}</button>
+                <button type="button" id="backButton" class="button">{{#if goBackText}}{{goBackText}}{{else}}Go Back{{/if}}</button>
+            </div>
+        </form>
+    </div>
+
+    <div id="success-message" style="display: none;">
+        {{#if successMessageText}}{{successMessageText}}{{else}}Reservation submitted successfully!{{/if}}
+    </div>
+</div>
+
+<script src="/js files/main.js"></script>
+</body>
 </html>
