@@ -511,6 +511,26 @@ app.post('/submit-admin-reservation', async (req, res) => {
     }
 });
 
+app.get('/adminReserveDetails', (req, res) => {
+    // Read from sessionStorage on the client side using JS and pass data via session if needed
+
+    // Fallback values to prevent blank output
+    const defaultData = {
+        title: 'Admin Reservation Details',
+        reservationTitle: 'Reservation Summary',
+        space: 'Unknown',
+        date: 'Unknown',
+        time: 'Unknown',
+        slotId: 'Unknown',
+        reserveSlotText: 'Confirm Reservation',
+        goBackText: 'Go Back',
+        reserveAnonymouslyText: 'Reserve Anonymously',
+        successMessageText: 'Reservation successfully submitted!'
+    };
+
+    res.render('adminReserveDetails', defaultData);
+});
+
 app.get('/api/reservations', isAuthenticated, async (req, res) => {
     try {
         let query = {};
