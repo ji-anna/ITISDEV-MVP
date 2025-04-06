@@ -70,4 +70,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const loggedInUser = JSON.parse(sessionStorage.getItem('loggedInUser'));
         window.location.href = (loggedInUser?.role === 'student') ? 'mainMenu' : 'adminMenu';
     });
+
+    function goBack() {
+        const loggedInUser = JSON.parse(sessionStorage.getItem('loggedInUser'));
+        window.location.href = 'adminMenu';
+    }
 });
