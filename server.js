@@ -573,23 +573,28 @@ app.post('/submit-reservation', async (req, res) => {
 
 
 
-app.get('/api/reservations', isAuthenticated, async (req, res) => {
+  app.get('/api/reservations', isAuthenticated, async (req, res) => {
     try {
         let query = {};
 
-        if (req.query.space && req.query.date && req.query.time) {
-            query = { space: req.query.space, date: req.query.date, time: req.query.time };
+        // Return all reservations for a given space and date (ignore time)
+        if (req.query.space && req.query.date) {
+            query = {
+                space: req.query.space,
+                date: req.query.date // Exact match on date only
+            };
         } else {
             query = { userName: req.session.user.name };
         }
 
-        const reservations = await Reservation.find(query);
+        const reservations = await Reservation.find(query).sort({ time: 1 });
         res.status(200).json(reservations);
     } catch (error) {
         console.error('Error fetching reservations:', error);
         res.status(500).json({ message: 'Internal Server Error' });
     }
 });
+
 
 app.get('/api/userReservations', isAuthenticated, async (req, res) => {
     try {

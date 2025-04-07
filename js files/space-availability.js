@@ -36,7 +36,8 @@ async function loadAvailability(forcedSpace = null) {
 
     availabilityDiv.classList.add('space-availability');
 
-    const response = await fetch(`/api/reservations?space=${space}&date=${selectedDate}&time=${selectedTime}`);
+    const response = await fetch(`/api/reservations?space=${space}&date=${selectedDate}`);
+
     const reservations = await response.json();
 
     const loggedInUser = JSON.parse(sessionStorage.getItem('loggedInUser'));
