@@ -518,7 +518,7 @@ app.post('/submit-reservation', async (req, res) => {
         const { space, date, time, slotId, anonymous, userId } = req.body;
 
         if (!userId) {
-            return res.status(400).json({ message: 'User ID is required.' });
+            return res.status(400).send('User ID is required.');
         }
 
         const newReservation = new Reservation({
@@ -526,18 +526,20 @@ app.post('/submit-reservation', async (req, res) => {
             date,
             time,
             slotId,
-            anonymous,
-            userId // now coming from request body
+            anonymous: anonymous === 'on', // handle checkbox
+            userId
         });
 
         await newReservation.save();
 
-        res.status(200).json({ message: 'Reservation successful!' });
+        // Redirect to the space-availability page (you can adjust the URL if needed)
+        res.redirect(`/adminReserve`);
     } catch (error) {
         console.error('Error submitting reservation:', error);
-        res.status(500).json({ message: 'Internal Server Error' });
+        res.status(500).send('Internal Server Error');
     }
 });
+
 
   // Record ticket usage on reservation
   app.post('/submit-admin-reservation', async (req, res) => {

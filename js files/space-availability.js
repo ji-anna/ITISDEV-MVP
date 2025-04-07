@@ -13,23 +13,21 @@ function generateSlots(rows, cols) {
     return slots;
 }
 
-async function loadAvailability() {
-    const space = document.getElementById('spaces').value;
+async function loadAvailability(forcedSpace = null) {
+    const spaceDropdown = document.getElementById('spaces');
+    const space = forcedSpace || spaceDropdown?.value;
+
     if (!space) return;
 
     const availabilityDiv = document.getElementById('space-availability');
     if (!availabilityDiv) return;
 
-    // Clear existing slots before adding new ones
     clearSlots();
-
-    // Clear the generatedSpaces set to force regeneration of slots for new space
     generatedSpaces.clear();
 
-    // Generate slots only if they haven't been generated before
     if (!generatedSpaces.has(space)) {
-        slots[space] = generateSlots(5, 5);
-        generatedSpaces.add(space);  // Mark space as generated
+        slots[space] = generateSlots(5, 5); // or whatever dimensions apply to Third Floor
+        generatedSpaces.add(space);
     }
 
     const now = new Date();
@@ -43,7 +41,6 @@ async function loadAvailability() {
 
     const loggedInUser = JSON.parse(sessionStorage.getItem('loggedInUser'));
 
-    // Render the slots for the selected space
     slots[space].forEach(slot => {
         const slotDiv = document.createElement('div');
         slotDiv.className = 'slot';
@@ -83,6 +80,7 @@ async function loadAvailability() {
         availabilityDiv.appendChild(slotDiv);
     });
 }
+
 
 // Function to clear existing slots
 function clearSlots() {
@@ -167,6 +165,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const spaceDropdown = document.getElementById('spaces');
     updateDateTimeDisplay();
 
+    // If dropdown exists but has no value selected, default to "Third Floor"
+    const defaultSpace = "Third Floor";
+    if (!spaceDropdown?.value) {
+        loadAvailability(defaultSpace);
+    } else {
+        loadAvailability();
+    }
+
     spaceDropdown?.addEventListener('change', () => {
         updateDateTimeDisplay();
         loadAvailability();
@@ -182,3 +188,4 @@ document.addEventListener('DOMContentLoaded', () => {
         window.location.href = (loggedInUser.role === 'student') ? 'mainMenu' : 'adminMenu';
     });
 });
+
