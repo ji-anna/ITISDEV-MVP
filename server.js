@@ -901,3 +901,21 @@ app.listen(port, async () => {
     console.log(`Server is running at http://localhost:${port}`);
     await initDB();
 });
+
+app.post('/submit-reservation', async (req, res) => {
+    try {
+      const { space, date, time, slotId, anonymous } = req.body;
+      if (!space || !date || !time || !slotId) {
+        return res.status(400).json({ message: 'Missing reservation data' });
+      }
+  
+      // Save to DB or do something
+      console.log('Reservation received:', req.body);
+  
+      res.json({ message: 'Reservation saved successfully' });
+    } catch (error) {
+      console.error('Error saving reservation:', error);
+      res.status(500).json({ message: 'Internal Server Error' });
+    }
+  });
+  

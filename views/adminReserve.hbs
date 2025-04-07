@@ -25,7 +25,7 @@
 
     <div>
         <label for="spaces">Choose a slot:</label>
-        <select id="spaces">
+        <select id="spaces" onchange="loadAvailability()">
             {{#each spaces}}
                 <option value="{{this.name}}">{{this.location}}</option>
             {{/each}}

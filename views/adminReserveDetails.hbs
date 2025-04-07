@@ -31,7 +31,12 @@
     </div>
 
     <div id="reservation-form-container">
-        <form id="reservation-form" method="POST" action="/submit-reservation'">
+        <form id="reservation-form" method="POST" action="/submit-reservation">
+        <input type="hidden" name="space" value="{{space}}">
+        <input type="hidden" name="date" value="{{date}}">
+        <input type="hidden" name="time" value="{{time}}">
+        <input type="hidden" name="slotId" value="{{slotId}}">
+
             <input type="checkbox" id="anonymous" name="anonymous">
             <label for="anonymous">{{#if reserveAnonymouslyText}}{{reserveAnonymouslyText}}{{else}}Reserve Anonymously{{/if}}</label>
 
