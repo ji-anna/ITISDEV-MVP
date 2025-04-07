@@ -848,7 +848,7 @@ async function initDB() {
                 userName: 'Mingyu Kim'
             },
             {
-                space: '4th Flor',
+                space: '4th Floor',
                 date: new Date('2025-04-14'),
                 time: '09:30',
                 slotId: '4',
@@ -861,9 +861,9 @@ async function initDB() {
 
 
         const spaceData = [
-            { name: 'C', location: '3rd Floor' },
-            { name: 'D', location: '4th Floor' },
-            { name: 'E', location: '5th Floor' }
+            { name: '3rd Floor', location: '3rd Floor' },
+            { name: '4th Floor', location: '4th Floor' },
+            { name: '5th Floor', location: '5th Floor' }
         ];
 
         await User.bulkWrite(userData.map(user => ({
