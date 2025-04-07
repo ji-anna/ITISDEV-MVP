@@ -105,25 +105,27 @@ app.get('/reserve', isAuthenticated, async (req, res) => {
 
 
 app.post('/adminReserveDetails', (req, res) => {
-    const { space, date, time, slotId } = req.body;
+    const { space, date, time, slotId, userId} = req.body;
     res.render('adminReserveDetails', {
         title: 'Parking Space Availability - Admin',
         space,
         date,
         time,
-        slotId
+        slotId,
+        userId
     });
 });
 
 
 app.get('/adminReserveDetails', (req, res) => {
-    const { space, date, time, slotId } = req.query;
+    const { space, date, time, slotId, userId } = req.query;
     res.render('adminReserveDetails', {
         title: 'Parking Space Availability - Admin',
         space,
         date,
         time,
-        slotId
+        slotId,
+        userId
     });
 });
 
@@ -406,10 +408,10 @@ app.get('/api/users', async (req, res) => {
 
 app.post('/submit-reservation', async (req, res) => {
     try {
-        const { space, date, time, slotId, anonymous } = req.body;
+        const { space, date, time, slotId, anonymous, userId } = req.body;
 
-        if (!req.session.user) {
-            return res.status(401).json({ message: 'User not logged in!' });
+        if (!userId) {
+            return res.status(400).json({ message: 'User ID is required.' });
         }
 
         const newReservation = new Reservation({
@@ -418,7 +420,7 @@ app.post('/submit-reservation', async (req, res) => {
             time,
             slotId,
             anonymous,
-            userName: req.session.user.name
+            userId // now coming from request body
         });
 
         await newReservation.save();
@@ -430,12 +432,13 @@ app.post('/submit-reservation', async (req, res) => {
     }
 });
 
+
 app.post('/submit-admin-reservation', async (req, res) => {
     try {
-        const { space, date, time, slotId, anonymous, userName, userId } = req.body;
+        const { space, date, time, slotId, anonymous, userId } = req.body;
 
-        if (!req.session.user) {
-            return res.status(401).json({ message: 'User not logged in!' });
+        if (!userId) {
+            return res.status(400).json({ message: 'User ID is required.' });
         }
 
         const newReservation = new Reservation({
@@ -444,7 +447,6 @@ app.post('/submit-admin-reservation', async (req, res) => {
             time,
             slotId,
             anonymous,
-            userName,
             userId
         });
 
@@ -457,24 +459,7 @@ app.post('/submit-admin-reservation', async (req, res) => {
     }
 });
 
-app.get('/adminReserveDetails', (req, res) => {
-    // Read from sessionStorage on the client side using JS and pass data via session if needed
 
-    const defaultData = {
-        title: 'Admin Reservation Details',
-        reservationTitle: 'Reservation Summary',
-        space: 'Unknown',
-        date: 'Unknown',
-        time: 'Unknown',
-        slotId: 'Unknown',
-        reserveSlotText: 'Confirm Reservation',
-        goBackText: 'Go Back',
-        reserveAnonymouslyText: 'Reserve Anonymously',
-        successMessageText: 'Reservation successfully submitted!'
-    };
-
-    res.render('adminReserveDetails', defaultData);
-});
 
 app.get('/api/reservations', isAuthenticated, async (req, res) => {
     try {
@@ -902,20 +887,5 @@ app.listen(port, async () => {
     await initDB();
 });
 
-app.post('/submit-reservation', async (req, res) => {
-    try {
-      const { space, date, time, slotId, anonymous } = req.body;
-      if (!space || !date || !time || !slotId) {
-        return res.status(400).json({ message: 'Missing reservation data' });
-      }
-  
-      // Save to DB or do something
-      console.log('Reservation received:', req.body);
-  
-      res.json({ message: 'Reservation saved successfully' });
-    } catch (error) {
-      console.error('Error saving reservation:', error);
-      res.status(500).json({ message: 'Internal Server Error' });
-    }
-  });
+
   

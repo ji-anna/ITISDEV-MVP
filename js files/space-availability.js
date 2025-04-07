@@ -123,7 +123,8 @@ async function handleReservationLink(space, date, time, slotId) {
         };
 
         // Redirect to the details page
-        window.location.href = `/adminReserveDetails?space=${space}&date=${date}&time=${time}&slotId=${slotId}`;
+        window.location.href = `/adminReserveDetails?space=${space}&date=${date}&time=${time}&slotId=${slotId}&userId=${userID}`;
+
     }
 }
 
