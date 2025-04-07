@@ -2,7 +2,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const loginForm = document.getElementById('loginForm');
     const logoutButton = document.getElementById('logoutButton');
     const registerForm = document.getElementById('registerForm');
-    const deleteUserButton = document.getElementById('deleteUserButton');
 
     // LOGIN
     if (loginForm) {

@@ -103,9 +103,9 @@ app.get('/reserve', isAuthenticated, async (req, res) => {
     }
 });
 
-// In your server.js or routes.js
+
 app.post('/adminReserveDetails', (req, res) => {
-    const { space, date, time, slotId } = req.body; // Capture the data
+    const { space, date, time, slotId } = req.body;
     res.render('adminReserveDetails', {
         title: 'Parking Space Availability - Admin',
         space,
@@ -115,7 +115,7 @@ app.post('/adminReserveDetails', (req, res) => {
     });
 });
 
-// In your server.js
+
 app.get('/adminReserveDetails', (req, res) => {
     const { space, date, time, slotId } = req.query;
     res.render('adminReserveDetails', {
@@ -199,15 +199,6 @@ app.get('/api/usersById', async (req, res) => {
     }
 });
 
-app.get('/searchuser', async (req, res) => {
-    try {
-        const users = await User.find().lean();
-        res.render('searchuser', { users });
-    } catch (error) {
-        console.error('Error fetching users:', error);
-        res.status(500).json({ message: 'Internal Server Error' });
-    }
-});
 
 app.get('/profilepage', async (req, res) => {
     if (req.session.user) {
@@ -237,29 +228,6 @@ app.get('/profilepage', async (req, res) => {
 app.post('/adminLogin', (req, res) => {
     const formData = req.body;
     res.render('adminLogin', { data: formData });
-});
-
-app.get('/editprofile', async (req, res) => {
-    if (req.session.user) {
-        const user = await User.findById(req.session.user._id).lean();
-        const reservations = await Reservation.find({ userID: user._id }).lean();
-
-        res.render('editprofile', {
-            name: user.name,
-            email: user.email,
-            role: user.role,
-            department: user.department,
-            description: user.profileDesc,
-            reservations: reservations.map(reservation => ({
-                space: reservation.parkingFloor,
-                date: reservation.resStartSched.toDateString(),
-                time: `${reservation.resStartSched.toLocaleTimeString()} - ${reservation.resEndSched.toLocaleTimeString()}`,
-                slotID: reservation.reservationID
-            }))
-        });
-    } else {
-        res.redirect('/login');
-    }
 });
 
 app.get('/adminMenu', (req, res) => {
@@ -316,28 +284,6 @@ app.get('/admindeletereserve', async (req, res) => {
     }
 });
 
-app.get('/adminprofile', async (req, res) => {
-    if (req.session.user) {
-        const user = await User.findById(req.session.user._id).lean();
-        const reservations = await Reservation.find({ userID: user._id }).lean();
-
-        res.render('adminprofile', {
-            name: user.name,
-            email: user.email,
-            role: user.role,
-            department: user.department,
-            description: user.profileDesc,
-            reservations: reservations.map(reservation => ({
-                space: reservation.parkingFloor,
-                date: reservation.resStartSched.toDateString(),
-                time: `${reservation.resStartSched.toLocaleTimeString()} - ${reservation.resEndSched.toLocaleTimeString()}`,
-                slotID: reservation.reservationID
-            }))
-        });
-    } else {
-        res.redirect('/login');
-    }
-});
 
 app.get('/adminSearchUser', async (req, res) => {
     try {
@@ -514,7 +460,6 @@ app.post('/submit-admin-reservation', async (req, res) => {
 app.get('/adminReserveDetails', (req, res) => {
     // Read from sessionStorage on the client side using JS and pass data via session if needed
 
-    // Fallback values to prevent blank output
     const defaultData = {
         title: 'Admin Reservation Details',
         reservationTitle: 'Reservation Summary',
@@ -548,69 +493,6 @@ app.get('/api/reservations', isAuthenticated, async (req, res) => {
         res.status(500).json({ message: 'Internal Server Error' });
     }
 });
-
-
-app.delete('/api/deleteUser', isAuthenticated, async (req, res) => {
-    try {
-        const userId = req.session.user._id;
-        const name = req.session.user.name;
-
-
-        await User.findByIdAndDelete(userId);
-
-
-        await Reservation.deleteMany({ userName: name });
-
-
-        req.session.destroy(err => {
-            if (err) {
-                return res.status(500).json({ message: 'Failed to delete session!' });
-            }
-            res.status(200).json({ message: 'User account and associated reservations deleted successfully!' });
-        });
-    } catch (error) {
-        console.error('Error deleting user:', error);
-        res.status(500).json({ message: 'Internal Server Error' });
-    }
-});
-
-app.post('/api/updateProfile', isAuthenticated, async (req, res) => {
-    try {
-        const { name, email, role, department, profileDesc } = req.body;
-        const userId = req.session.user._id;
-        const image = req.files?.image;
-
-        let profileImg = req.session.user.profileImg;
-
-        if (image) {
-            const firstName = name.split(' ')[0].toLowerCase();
-            const fileExtension = path.extname(image.name);
-            const newFileName = `${firstName}${fileExtension}`;
-            const imagePath = path.join(__dirname, 'assets', newFileName);
-
-            await image.mv(imagePath);
-            profileImg = `/assets/${newFileName}`;
-        }
-
-        await User.findByIdAndUpdate(userId, {
-            name,
-            email,
-            role,
-            department,
-            profileDesc,
-            profileImg
-        });
-
-        const updatedUser = await User.findById(userId);
-        req.session.user = updatedUser;
-
-        res.status(200).json({ message: 'Profile updated successfully!' });
-    } catch (error) {
-        console.error('Error updating profile:', error);
-        res.status(500).json({ message: 'Internal Server Error' });
-    }
-});
-
 
 app.get('/api/userReservations', isAuthenticated, async (req, res) => {
     try {
