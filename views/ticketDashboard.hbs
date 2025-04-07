@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Ticket Dashboard</title>
+  <link rel="stylesheet" href="/css styles/ticketDashboard.css">
+</head>
+<body>
+
+<header>
+  <nav class="navbar-container">
+    <div class="logo-container">
+      <img src="/assets/logowhite.PNG" alt="Logo">
+    </div>
+    <ul class="nav-links">
+      <li><a href="/mainMenu">Home</a></li>
+      <li><a href="/space-availability">View Slots</a></li>
+      <li><a href="/profilepage">Reservations</a></li>
+      <li><a href="/ticketDashboard" class="active">Ticket Dashboard</a></li>
+      <li><a href="/" id="logoutButton">Logout</a></li>
+    </ul>
+  </nav>
+</header>
+
+<div class="ticket-dashboard-container">
+  <h1>My Tickets</h1>
+  <div class="ticket-balance">
+    <h2>Available Tickets: {{user.ticketCount}}</h2>
+    <a href="/ticketCheckout" class="button">Buy Ticket Pad</a>
+  </div>
+
+  <div class="ticket-history">
+    <h3>Ticket History</h3>
+    <ul class="tabs">
+      <li class="active" onclick="showTab('purchased')">Purchased</li>
+      <li onclick="showTab('used')">Used</li>
+    </ul>
+
+    <div id="purchased" class="tab-content active">
+      <table>
+        <tr><th>Date</th><th>Quantity</th><th>Total</th></tr>
+        {{#each purchases}}
+        <tr>
+          <td>{{this.date}}</td>
+          <td>{{this.quantity}}</td>
+          <td>₱{{multiply this.quantity 600}}</td>
+        </tr>
+        {{/each}}
+      </table>
+    </div>
+
+    <div id="used" class="tab-content">
+      <table>
+        <tr><th>Date</th><th>Slot</th><th>Space</th></tr>
+        {{#each usedTickets}}
+        <tr>
+          <td>{{this.date}}</td>
+          <td>Slot {{this.slotId}}</td>
+          <td>{{this.space}}</td>
+        </tr>
+        {{/each}}
+      </table>
+    </div>
+  </div>
+</div>
+
+<script src="/js files/ticketDashboard.js"></script>
+</body>
+</html>

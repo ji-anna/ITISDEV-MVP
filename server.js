@@ -50,6 +50,14 @@ app.use(express.static(path.join(__dirname)));
 const User = require("./models/User");
 const Reservation = require("./models/Reservations");
 const Space = require("./models/Space");
+const Purchase = require('./models/Purchase');
+const TicketUsage = require('./models/TicketUsage');
+
+const isStudent = (req, res, next) => {
+    if (req.session.user && req.session.user.role === 'student') return next();
+    res.redirect('/login');
+  };
+  
 
 app.get('/', (req, res) => {
     res.render('landingpage');
@@ -81,6 +89,105 @@ app.post('/register', (req, res) => {
 app.get('/mainMenu', (req, res) => {
     res.render('mainMenu');
 });
+
+app.get('/ticketDashboard', isAuthenticated, isStudent, async (req, res) => {
+    try {
+      const user = await User.findById(req.session.user._id).lean();
+      const purchases = await Purchase.find({ userId: user.userId }).lean();
+      const usedTickets = await TicketUsage.find({ userId: user.userId }).lean();
+  
+      res.render('ticketDashboard', {
+        user,
+        purchases,
+        usedTickets,
+        helpers: {
+          multiply: (a, b) => a * b
+        }
+      });
+    } catch (err) {
+      console.error("Error loading ticketDashboard:", err);
+      res.status(500).send("Internal Server Error");
+    }
+  });
+  
+// Ticket Checkout
+app.get('/ticketCheckout', isAuthenticated, isStudent, (req, res) => {
+    res.render('ticketCheckout', {
+      user: req.session.user
+    });
+  });
+
+// Confirm Ticket Purchase
+app.post('/api/confirmCheckout', isAuthenticated, isStudent, async (req, res) => {
+    try {
+      const quantity = parseInt(req.body.quantity) || 1;
+      const total = quantity * 600;
+      const userId = req.session.user.userId;
+  
+      const purchase = new Purchase({ userId, quantity, total });
+      await purchase.save();
+      await User.updateOne({ userId }, { $inc: { ticketCount: quantity * 10 } });
+  
+      req.session.lastReceipt = {
+        userName: req.session.user.name,
+        quantity,
+        total,
+        date: new Date().toLocaleString()
+      };
+  
+      res.status(200).json({ message: 'Purchase successful!' });
+    } catch (err) {
+      console.error('Error confirming ticket purchase:', err);
+      res.status(500).json({ message: 'Failed to confirm purchase.' });
+    }
+  });
+
+// Receipt View
+app.get('/receipt', isAuthenticated, isStudent, (req, res) => {
+    const data = req.session.lastReceipt;
+    if (!data) return res.redirect('/ticketDashboard');
+    res.render('receipt', data);
+  });
+
+  // Check ticket eligibility (AJAX for admin)
+app.get('/api/checkTicketEligibility', async (req, res) => {
+    try {
+      const user = await User.findOne({ userId: req.query.userId });
+      if (!user) return res.status(404).json({ eligible: false, message: 'User not found' });
+      res.json({ eligible: user.ticketCount > 0, ticketCount: user.ticketCount });
+    } catch (err) {
+      console.error('Error checking ticket eligibility:', err);
+      res.status(500).json({ eligible: false, message: 'Internal Error' });
+    }
+  });
+
+// Buy ticket pad
+app.post('/api/buyTickets', isAuthenticated, async (req, res) => {
+    try {
+      const user = req.session.user;
+      const quantity = req.body.quantity || 1;
+      const total = 600 * quantity;
+  
+      const purchase = new Purchase({
+        userId: user.userId,
+        quantity,
+        total
+      });
+      await purchase.save();
+  
+      await User.updateOne(
+        { userId: user.userId },
+        { $inc: { ticketCount: quantity * 10 } }
+      );
+  
+      res.status(200).json({ message: 'Tickets successfully purchased!', purchase });
+    } catch (err) {
+      console.error('Error buying tickets:', err);
+      res.status(500).json({ message: 'Purchase failed.' });
+    }
+  });
+  
+
 
 app.get('/reserve', isAuthenticated, async (req, res) => {
     try {
@@ -430,32 +537,35 @@ app.post('/submit-reservation', async (req, res) => {
     }
 });
 
-app.post('/submit-admin-reservation', async (req, res) => {
+  // Record ticket usage on reservation
+  app.post('/submit-admin-reservation', async (req, res) => {
     try {
-        const { space, date, time, slotId, anonymous, userName, userId } = req.body;
-
-        if (!req.session.user) {
-            return res.status(401).json({ message: 'User not logged in!' });
-        }
-
-        const newReservation = new Reservation({
-            space,
-            date,
-            time,
-            slotId,
-            anonymous,
-            userName,
-            userId
-        });
-
-        await newReservation.save();
-
-        res.status(200).json({ message: 'Reservation successful!' });
-    } catch (error) {
-        console.error('Error submitting reservation:', error);
-        res.status(500).json({ message: 'Internal Server Error' });
+      const { userId, space, date, time, slotId, anonymous, userName } = req.body;
+  
+      const user = await User.findOne({ userId });
+      if (!user || user.ticketCount < 1) {
+        return res.status(400).json({ message: 'Insufficient tickets.' });
+      }
+  
+      const reservation = new Reservation({ space, date, time, slotId, anonymous, userName, userId });
+      await reservation.save();
+  
+      // Decrement ticket count and record usage
+      await User.updateOne({ userId }, { $inc: { ticketCount: -1 } });
+      await new TicketUsage({
+        userId,
+        reservationId: reservation._id,
+        slotId,
+        space,
+        date
+      }).save();
+  
+      res.status(200).json({ message: 'Reservation successful!' });
+    } catch (err) {
+      console.error('Admin reservation failed:', err);
+      res.status(500).json({ message: 'Internal Server Error' });
     }
-});
+  });
 
 app.get('/adminReserveDetails', (req, res) => {
     // Read from sessionStorage on the client side using JS and pass data via session if needed

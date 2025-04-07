@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Buy Parking Tickets</title>
+  <link rel="stylesheet" href="/css styles/ticketCheckout.css">
+</head>
+<body>
+  <div class="dashboard-container">
+    <h1>Buy Ticket Pad</h1>
+    <form id="ticketForm">
+      <label>Quantity of Pads (10 tickets each):</label>
+      <input type="number" id="padQty" name="padQty" value="1" min="1" required>
+
+      <div class="summary">
+        <p><strong>Ticket Cost:</strong> ₱600/pad</p>
+        <p><strong>Convenience Fee:</strong> ₱20/pad</p>
+        <p><strong>Total:</strong> <span id="totalCost">₱620</span></p>
+      </div>
+
+      <button type="submit" id="confirmPurchase">Confirm Purchase</button>
+    </form>
+    <a href="/ticketDashboard" class="button">Cancel</a>
+  </div>
+
+  <script src="/js files/ticketPurchase.js"></script>
+</body>
+</html>

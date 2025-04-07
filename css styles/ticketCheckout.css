@@ -1,0 +1,67 @@
+body {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    background-color: #f4f7f9;
+  }
+  
+  .dashboard-container {
+    max-width: 500px;
+    margin: 80px auto;
+    background: #ffffff;
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    text-align: center;
+  }
+  
+  h1 {
+    color: #045f01;
+    margin-bottom: 30px;
+  }
+  
+  label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 10px;
+    font-size: 1rem;
+  }
+  
+  input[type="number"] {
+    width: 100px;
+    padding: 10px;
+    margin-bottom: 20px;
+    font-size: 1rem;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    text-align: center;
+  }
+  
+  .summary p {
+    margin: 5px 0;
+    font-size: 0.95rem;
+    color: #333;
+  }
+  
+  #totalCost {
+    font-weight: bold;
+    color: #2d7814;
+  }
+  
+  button#confirmPurchase, a.button {
+    display: inline-block;
+    background-color: #009F4F;
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 12px;
+    font-size: 1rem;
+    cursor: pointer;
+    margin: 20px 10px 0;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+  }
+  
+  button#confirmPurchase:hover, a.button:hover {
+    background-color: #007b3a;
+  }
+  

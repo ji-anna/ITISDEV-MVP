@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Receipt - Parking Tickets</title>
+  <link rel="stylesheet" href="/css styles/ticket.css">
+</head>
+<body>
+  <div class="receipt-container" id="receipt">
+    <h2>Parking Ticket Receipt</h2>
+    <p><strong>Name:</strong> {{user.name}}</p>
+    <p><strong>User ID:</strong> {{user.userId}}</p>
+    <p><strong>Date:</strong> {{purchase.date}}</p>
+    <p><strong>Quantity:</strong> {{purchase.quantity}} pads ({{multiply purchase.quantity 10}} tickets)</p>
+    <p><strong>Total:</strong> ₱{{multiply purchase.quantity 620}}</p>
+  </div>
+
+  <div class="button-group">
+    <button onclick="window.location.href='/ticketDashboard'">Back</button>
+    <button id="downloadReceipt">Download Receipt</button>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  <script src="/js files/ticket.js"></script>
+</body>
+</html>
