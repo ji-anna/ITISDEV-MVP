@@ -468,7 +468,6 @@ app.post('/api/login', async (req, res) => {
         }
 
         req.session.user = user;
-        req.session.userId = user._id;
         res.status(200).json(user);
     } catch (error) {
         console.error('Error during login:', error);
@@ -585,7 +584,7 @@ app.post('/submit-reservation', async (req, res) => {
                 date: req.query.date // Exact match on date only
             };
         } else {
-            query = { userName: req.session.user.name };
+            query = { userId: req.session.user.userId };
         }
 
         const reservations = await Reservation.find(query).sort({ time: 1 });
@@ -599,7 +598,7 @@ app.post('/submit-reservation', async (req, res) => {
 
 app.get('/api/userReservations', isAuthenticated, async (req, res) => {
     try {
-        const userId = req.session.user._id;
+        const userId = req.session.user.userId;
         const reservations = await Reservation.find({ userID: userId }).lean();
         res.json(reservations);
     } catch (error) {
@@ -924,7 +923,7 @@ async function initDB() {
                 time: '13:46',
                 slotId: '1',
                 anonymous: false,
-                userName: 'Jake Sim'
+                userId: '12279394'
             },
             {
                 space: '3rd Floor',
@@ -932,7 +931,7 @@ async function initDB() {
                 time: '09:00',
                 slotId: '2',
                 anonymous: true,
-                userName: 'Momo Hirai'
+                userId: '12279395'
             },
             {
                 space: '3rd Floor',
@@ -940,7 +939,7 @@ async function initDB() {
                 time: '09:30',
                 slotId: '4',
                 anonymous: true,
-                userName: 'Jin Kim'
+                userId: '12279396'
             },
             {
                 space: '3rd Floor',
@@ -948,7 +947,7 @@ async function initDB() {
                 time: '09:30',
                 slotId: '2',
                 anonymous: true,
-                userName: 'Mingyu Kim'
+                userId: '12279392'
             },
             {
                 space: '4th Floor',
@@ -956,7 +955,7 @@ async function initDB() {
                 time: '09:30',
                 slotId: '4',
                 anonymous: true,
-                userName: 'Wonwoo Jeon'
+                userId: '12279391'
             }
 
 
@@ -1004,9 +1003,6 @@ app.listen(port, async () => {
     console.log(`Server is running at http://localhost:${port}`);
     await initDB();
 });
-
-const ticketRoutes = require('./js files/ticketRoutes'); // adjust path if needed
-app.use('/api', ticketRoutes); // or app.use('/api', ticketRoutes);
 
 
   
