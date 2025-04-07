@@ -1,24 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
+   
     <title>Users List</title>
-    <link rel="stylesheet" href="css styles/userlist.css">
+    <link rel="stylesheet" href="css styles/adminuserlist.css">
 </head>
 
 <body>
-
     <header>
         <nav class="navbar-container">
-            <div class="logo-container">
-                <img src="assets\logowhite.PNG">
-            </div>
-            <ul class="nav-links">
-                <li><a href="/mainMenu">Home</a></li>
-                <li><a href="/space-availability">View Slots</a></li>
-                <li><a href="/profilepage">Reservations</a></li>
-                <li><a href="/" id="logoutButton">Logout</a></li>
-            </ul>
+                <div class="logo-container">
+                    <img src="assets\logowhite.PNG">
+                </div>
+                <ul class="nav-links">
+                    <li><a href="/adminMenu">Home</a></li>
+                    <li><a href="/adminreserve">Reserve</a></li>
+                    <li><a href="/adminSearchUser">Search user</a></li>
+                    <li><a href="/" id= "logoutButton">Logout</a></li>
+                </ul>
         </nav>
     </header>
 
@@ -29,6 +28,7 @@
         <table id="user-list">
             <thead>
                 <tr>
+                    <th>ID</th>
                     <th>Name</th>
                     <th>Email</th>
                     <th>Role</th>
@@ -38,6 +38,7 @@
             <tbody id="user-table-body">
                 {{#users}}
                 <tr>
+                    <td>{{id}}</td>
                     <td>{{name}}</td>
                     <td>{{email}}</td>
                     <td>{{role}}</td>
@@ -53,8 +54,6 @@
 
     </div>
 
-    <script src="js files/searchUsers.js"></script>
-    <script src="/js files/main.js"></script>
+    <script src="js files/searchUsersAdmin.js"></script>
 </body>
-
 </html>

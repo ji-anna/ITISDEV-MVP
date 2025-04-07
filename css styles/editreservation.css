@@ -96,8 +96,8 @@ input[type="checkbox"] {
 .button-group {
     display: flex;
     flex-direction: column;
-    width: 70%;
-    align-items: center;
+    gap: 12px;
+    width: 100%;
   }
 
 /* FOR NAVIGATION BAR */

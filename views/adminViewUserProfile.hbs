@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{name}}'s Profile</title>
+    <link rel="stylesheet" href="/css styles/adminprofile.css">
+</head>
+<body>
+    
+    <header>
+        <nav class="navbar-container">
+                <div class="logo-container">
+                    <img src="/assets/logowhite.PNG">
+                </div>
+                <ul class="nav-links">
+                    <li><a href="/adminMenu">Home</a></li>
+                    <li><a href="/adminreserve">Reserve</a></li>
+                    <li><a href="/adminSearchUser">Search user</a></li>
+                    <li><a href="/" id= "logoutButton">Logout</a></li>
+                </ul>
+        </nav>
+    </header>
+
+    <div class="profile-card">
+        <h1>{{name}}'s Profile</h1>
+        <div class="profile-image">
+            <img id="profileImage" src="{{profileImg}}" alt="Profile Photo">
+        </div>
+        <div class="profile-details">
+            <div>
+                <label>Name: </label>
+                <span>{{name}}</span>
+            </div>
+            <div>
+                <label>Email: </label>
+                <span>{{email}}</span>
+            </div>
+            <div>
+                <label>Role: </label>
+                <span>{{role}}</span>
+            </div>
+            <div>
+                <label>Department: </label>
+                <span>{{department}}</span>
+            </div>
+            <div>
+                <label>Description: </label>
+                <span>{{description}}</span>
+            </div>
+
+            <div class="reservations-section">
+                <h1>My Reservations</h1>
+                <table id="userReservations">
+                    <thead>
+                        <tr>
+                            <th>Lab</th>
+                            <th>Date</th>
+                            <th>Time</th>
+                            <th>Slot ID</th>
+                            <th>Anonymous</th>
+                            <th>Delete</th>
+                            <th>Actions</th> 
+                        </tr>
+                    </thead>
+                    <tbody>
+                         {{#each reservations}}
+                            <tr>
+                                <td>{{this.lab}}</td>
+                                <td>{{this.date}}</td>
+                                <td>{{this.time}}</td>
+                                <td>{{this.slotId}}</td>
+                                <td>{{this.anonymous}}</td>
+                                <td> <button class="delete-button" data-reservation-id="{{this._id}}">Delete</button> </td>
+                                <td><button class="edit-button" data-reservation-id="{{this._id}}">Edit</button></td> 
+            </td>
+                            </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <center>
+            <div class="button-grp">
+                <button onclick="window.location.href = '/adminSearchUser';" class="button">Back to Search</button>
+            </div>
+        </center>
+    </div>
+   <script src="/js files/adminEditReserve.js"></script> 
+</body>
+</html>

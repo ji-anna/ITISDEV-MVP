@@ -763,9 +763,9 @@ app.get('/adminViewUser/:id', async (req, res) => {
 
         if (user) {
 
-            const reservations = await Reservation.find({ userName: user.name }).lean();
+            const reservations = await Reservation.find({ userId: user.userId }).lean();
 
-            res.render('adminViewProfile', {
+            res.render('adminViewUserProfile', {
                 name: user.name,
                 email: user.email,
                 role: user.role,

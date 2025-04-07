@@ -3,7 +3,7 @@
 
 <head>
     <title>Edit Reservation</title>
-    <link rel="stylesheet" href="css styles/admineditreservation.css">
+    <link rel="stylesheet" href="css styles/editreservation.css">
 </head>
 
 <body>
@@ -38,12 +38,6 @@
                 <input type="date" id="date" name="date" value="{{reservation.date}}">
             </div>
             <div class="input-group">
-                <label for="time">Time:</label>
-                <select id="time" name="time">
-
-                </select>
-            </div>
-            <div class="input-group">
                 <label for="slotId">Slot ID:</label>
                 <input type="text" id="slotId" name="slotId" value="{{reservation.slotId}}">
             </div>
@@ -51,8 +45,12 @@
                 <label for="anonymous">Anonymous:</label>
                 <input type="checkbox" id="anonymous" name="anonymous" {{#if reservation.anonymous}}checked{{/if}}>
             </div>
-            <button class="button" type="submit">Update Reservation</button>
-            <button class="button" type="button" id="cancelButton">Cancel</button>
+
+            <div class="button-group">
+                <button class="button" type="submit">Update Reservation</button>
+                <button class="button" type="button" id="cancelButton">Cancel</button>
+            </div>
+            
         </form>
     </div>
     <script src="js files/space-availability.js"></script>

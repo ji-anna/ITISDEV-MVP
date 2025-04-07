@@ -1,3 +1,5 @@
+//baka di na need eto kase for student self-res
+
 document.addEventListener('DOMContentLoaded', async () => {
     const urlParams = new URLSearchParams(window.location.search);
     const reservationId = urlParams.get('reservationId');
