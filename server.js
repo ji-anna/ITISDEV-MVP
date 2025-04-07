@@ -936,7 +936,7 @@ async function initDB() {
             {
                 space: '5th Floor',
                 date: new Date('2025-04-10'),
-                time: '09:00',
+                time: '13:46',
                 slotId: '1',
                 anonymous: false,
                 userName: 'Jake Sim'

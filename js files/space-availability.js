@@ -1,3 +1,6 @@
+const slots = {}; // Store slots for each space
+const generatedSpaces = new Set(); // Track which spaces have been generated
+
 function generateSlots(rows, cols) {
     const slots = [];
     let id = 1;
@@ -10,22 +13,29 @@ function generateSlots(rows, cols) {
     return slots;
 }
 
-const slots = {
-    C: generateSlots(5, 5),
-    D: generateSlots(5, 5),
-    E: generateSlots(5, 5)
-};
-
 async function loadAvailability() {
     const space = document.getElementById('spaces').value;
     if (!space) return;
+
+    const availabilityDiv = document.getElementById('space-availability');
+    if (!availabilityDiv) return;
+
+    // Clear existing slots before adding new ones
+    clearSlots();
+
+    // Clear the generatedSpaces set to force regeneration of slots for new space
+    generatedSpaces.clear();
+
+    // Generate slots only if they haven't been generated before
+    if (!generatedSpaces.has(space)) {
+        slots[space] = generateSlots(5, 5);
+        generatedSpaces.add(space);  // Mark space as generated
+    }
 
     const now = new Date();
     const selectedDate = now.toISOString().split('T')[0];
     const selectedTime = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
 
-    const availabilityDiv = document.getElementById('space-availability');
-    availabilityDiv.innerHTML = '';
     availabilityDiv.classList.add('space-availability');
 
     const response = await fetch(`/api/reservations?space=${space}&date=${selectedDate}&time=${selectedTime}`);
@@ -33,6 +43,7 @@ async function loadAvailability() {
 
     const loggedInUser = JSON.parse(sessionStorage.getItem('loggedInUser'));
 
+    // Render the slots for the selected space
     slots[space].forEach(slot => {
         const slotDiv = document.createElement('div');
         slotDiv.className = 'slot';
@@ -72,6 +83,16 @@ async function loadAvailability() {
         availabilityDiv.appendChild(slotDiv);
     });
 }
+
+// Function to clear existing slots
+function clearSlots() {
+    const availabilityDiv = document.getElementById('space-availability');
+    while (availabilityDiv.firstChild) {
+        availabilityDiv.removeChild(availabilityDiv.firstChild);
+    }
+}
+
+
 
 async function handleReservationLink(space, date, time, slotId) {
     const loggedInUser = JSON.parse(sessionStorage.getItem('loggedInUser'));
