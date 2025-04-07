@@ -6,7 +6,7 @@ const reservationsSchema = new mongoose.Schema({
     time: { type: String, required: true },
     slotId: { type: Number, required: true },
     anonymous: { type: Boolean, default: false },
-    userName: { type: String, required: true },
+    userId: { type: String, required: true },
 });
 
 const Reservations = mongoose.model('reservationsCollection', reservationsSchema);

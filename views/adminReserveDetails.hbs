@@ -28,6 +28,7 @@
         <p>Date: {{date}}</p>
         <p>Time: {{time}}</p>
         <p>Slot ID: {{slotId}}</p>
+        <p>User ID: {{userId}}</p>
     </div>
 
     <div id="reservation-form-container">
@@ -36,6 +37,8 @@
         <input type="hidden" name="date" value="{{date}}">
         <input type="hidden" name="time" value="{{time}}">
         <input type="hidden" name="slotId" value="{{slotId}}">
+        <input type="hidden" name="userId" value="{{userId}}">
+
 
             <input type="checkbox" id="anonymous" name="anonymous">
             <label for="anonymous">{{#if reserveAnonymouslyText}}{{reserveAnonymouslyText}}{{else}}Reserve Anonymously{{/if}}</label>

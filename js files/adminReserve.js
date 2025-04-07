@@ -1,45 +1,39 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const dateInput = document.getElementById('date');
-    const timeInput = document.getElementById('time');
-    const studentID = document.getElementById('id');
-    const submitButton = document.getElementById('submit');
+    const labSelect = document.getElementById('lab-select');
+    const dateSelect = document.getElementById('date-select');
+    const timeSelect = document.getElementById('time-select');
+    const seatSelect = document.getElementById('seat-select');
+    const studentId = document.getElementById('id'); 
+    const reservationForm = document.getElementById('reservation-form');
     const successMessage = document.getElementById('success-message');
+   
+    const urlParams = new URLSearchParams(window.location.search);
+    const initialLab = urlParams.get('lab');
+    const initialDate = urlParams.get('date');
+    const initialTime = urlParams.get('time');
+    const initialSeatId = urlParams.get('seatId');
+    const initialUserId = urlParams.get('userId'); // 👈 get userId from URL
 
-    function updateCurrentDateTime() {
-        const now = new Date();
-        const todayStr = now.toISOString().split('T')[0];
-        const hours = now.getHours().toString().padStart(2, '0');
-        const minutes = now.getMinutes().toString().padStart(2, '0');
-        const timeStr = `${hours}:${minutes}`;
+    // Update the UI
+    labSelect.textContent = initialLab || 'Not selected';
+    dateSelect.textContent = initialDate ? new Date(initialDate).toLocaleDateString() : 'Not selected';
+    timeSelect.textContent = initialTime || 'Not selected';
+    seatSelect.textContent = initialSeatId ? `Seat ${initialSeatId}` : 'Not selected';
+    studentId.textContent = initialUserId || 'Not provided'; // 👈 Display userId
 
-        if (dateInput) dateInput.value = todayStr;
-        if (timeInput) timeInput.value = timeStr;
-    }
+    async function submitReservation(event) {
+        event.preventDefault();
 
-    updateCurrentDateTime();
-    setInterval(updateCurrentDateTime, 60000);
+        successMessage.style.display = 'none';
 
-    submitButton?.addEventListener('click', async () => {
-        successMessage?.style?.display = 'none';
-
-        const userId = studentID.value;
-        const anonymous = document.getElementById('anonymous')?.checked || false;
-
-        if (!window.selectedReservation) {
-            alert("Please select a parking slot first.");
-            return;
-        }
-
-        if (!userId) {
-            alert("Please enter a valid ID number.");
-            return;
-        }
+        const anonymous = document.getElementById('anonymous').checked;
 
         const reservationData = {
-            ...window.selectedReservation,
-            userId,
-            date: dateInput.value,
-            time: timeInput.value,
+            lab: initialLab,
+            date: initialDate,
+            time: initialTime,
+            seatId: initialSeatId,
+            userId: initialUserId, // 👈 Send userId instead of userName
             anonymous
         };
 
@@ -53,26 +47,22 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             if (response.ok) {
-                sessionStorage.setItem('adminReservationDetails', JSON.stringify(reservationData));
-                window.location.href = '/adminReserveDetails';
+                successMessage.style.display = 'block';
+                reservationForm.reset();
             } else {
                 const errorData = await response.json();
-                alert("Error: " + errorData.message);
+                console.error('Error:', errorData.message);
             }
         } catch (error) {
-            console.error('Error submitting reservation:', error);
-            alert("Something went wrong.");
+            console.error('Error:', error);
         }
-    });
-
-    document.getElementById('backButton')?.addEventListener('click', goBack);
-    document.getElementById('cancel')?.addEventListener('click', () => {
-        const loggedInUser = JSON.parse(sessionStorage.getItem('loggedInUser'));
-        window.location.href = (loggedInUser?.role === 'student') ? 'mainMenu' : 'adminMenu';
-    });
+    }
 
     function goBack() {
         const loggedInUser = JSON.parse(sessionStorage.getItem('loggedInUser'));
         window.location.href = 'adminMenu';
     }
+
+    reservationForm.addEventListener('submit', submitReservation);
+    document.getElementById('backButton').addEventListener('click', goBack);
 });
