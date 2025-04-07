@@ -6,6 +6,20 @@
   <link rel="stylesheet" href="/css styles/ticketCheckout.css">
 </head>
 <body>
+   <header>
+        <nav class="navbar-container">
+            <div class="logo-container">
+                <img src="assets\logowhite.PNG">
+            </div>
+            <ul class="nav-links">
+                <li><a href="/mainMenu">Home</a></li>
+                <li><a href="/space-availability">View Slots</a></li>
+                <li><a href="/profilepage" class="active">Reservations</a></li>
+                <li><a href="/ticketDashboard">Ticket Dashboard</a></li>
+                <li><a href="/" id="logoutButton">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
   <div class="dashboard-container">
     <h1>Buy Ticket Pad</h1>
     <form id="ticketForm">
@@ -24,5 +38,6 @@
   </div>
 
   <script src="/js files/ticketPurchase.js"></script>
+   <script src="/js files/ticketRoutes.js"></script>
 </body>
 </html>
