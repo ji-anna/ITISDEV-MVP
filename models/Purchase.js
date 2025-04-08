@@ -1,7 +1,10 @@
 const mongoose = require('mongoose');
 
 const purchaseSchema = new mongoose.Schema({
-  userId: String,
+  userId: {
+    type: String, // ✅ Store userId as a string, not ObjectId
+    required: true
+  },
   quantity: Number,
   date: { type: Date, default: Date.now }
 });

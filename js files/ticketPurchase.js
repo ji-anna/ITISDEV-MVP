@@ -16,11 +16,11 @@ document.addEventListener("DOMContentLoaded", () => {
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
     const qty = parseInt(qtyInput.value);
-
+  
     // Confirm the purchase with the user
     const confirmPurchase = confirm(`Confirm purchase of ${qty} pad(s) for ₱${qty * 620}?`);
     if (!confirmPurchase) return;
-
+  
     try {
       // Send purchase request to backend
       const response = await fetch('/api/checkoutTickets', {
@@ -28,9 +28,11 @@ document.addEventListener("DOMContentLoaded", () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ quantity: qty })
       });
-      
-
+  
+      // Check if the response is OK
       const result = await response.json();
+      console.log('API Response:', result);  // Log the full response here for debugging
+  
       if (response.ok) {
         alert(result.message);
         window.location.href = '/ticketDashboard';  // Redirect to ticket dashboard
@@ -42,4 +44,5 @@ document.addEventListener("DOMContentLoaded", () => {
       alert('An error occurred while processing your purchase.');
     }
   });
-});
+  });
+  
