@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         try {
-            const response = await fetch('/submit-admin-reservation', {
+            const response = await fetch('/submit-reservation', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

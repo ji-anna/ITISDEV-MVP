@@ -556,58 +556,46 @@ app.post('/submit-reservation', async (req, res) => {
             return res.status(400).send('User ID is required.');
         }
 
+
+        const user = await User.findOne({ userId });
+        if (!user || user.ticketCount < 1) {
+            return res.status(400).json({ message: 'Insufficient tickets.' });
+        }
+
+
         const newReservation = new Reservation({
             space,
             date,
             time,
             slotId,
-            anonymous: anonymous === 'on', // handle checkbox
+            anonymous: anonymous === 'on',
             userId,
             status
         });
 
-        await newReservation.save();
+        const savedReservation = await newReservation.save();
 
-        // Redirect to the space-availability page (you can adjust the URL if needed)
+
+        await User.updateOne({ userId }, { $inc: { ticketCount: -1 } });
+
+
+        const ticketUsage = new TicketUsage({
+            userId,
+            reservationId: savedReservation._id,
+            slotId,
+            space,
+            date,
+            status
+        });
+
+        await ticketUsage.save();
+
         res.redirect(`/adminReserve`);
     } catch (error) {
         console.error('Error submitting reservation:', error);
         res.status(500).send('Internal Server Error');
     }
 });
-
-
-  // Record ticket usage on reservation
-  app.post('/submit-admin-reservation', async (req, res) => {
-    try {
-      const { userId, space, date, time, slotId, anonymous, userName, status } = req.body;
-  
-      const user = await User.findOne({ userId });
-      if (!user || user.ticketCount < 1) {
-        return res.status(400).json({ message: 'Insufficient tickets.' });
-      }
-  
-      const reservation = new Reservation({ space, date, time, slotId, anonymous, userName, userId, status });
-      await reservation.save();
-  
-      // Decrement ticket count and record usage
-      await User.updateOne({ userId }, { $inc: { ticketCount: -1 } });
-      await new TicketUsage({
-        userId,
-        reservationId: reservation._id,
-        slotId,
-        space,
-        date,
-        status
-      }).save();
-  
-      res.status(200).json({ message: 'Reservation successful!' });
-    } catch (err) {
-      console.error('Admin reservation failed:', err);
-      res.status(500).json({ message: 'Internal Server Error' });
-    }
-  });
-
 
 
   app.get('/api/reservations', isAuthenticated, async (req, res) => {
@@ -882,13 +870,13 @@ app.get('/adminEditReserve', async (req, res) => {
 });
 
 app.post('/api/markReservationCompleted', async (req, res) => {
-    const { userId, slotId, date, time, status } = req.body;
+    const { userId, slotId, date, status } = req.body;
 
     try {
         const reservation = await Reservation.findOneAndUpdate(
-            { userId, slotId, date, time }, // Now matching by time too
-            { status: 'completed' },
-            { new: true }
+            { userId, slotId, date },
+            { status: 'completed' }, // Set the status to completed
+            { new: true } // Return the updated document
         );
 
         if (!reservation) {
