@@ -606,11 +606,11 @@ app.post('/submit-reservation', async (req, res) => {
     try {
         let query = {};
 
-        // Return all reservations for a given space and date (ignore time)
+       
         if (req.query.space && req.query.date) {
             query = {
                 space: req.query.space,
-                date: req.query.date // Exact match on date only
+                date: req.query.date
             };
         } else {
             query = { userId: req.session.user.userId };
