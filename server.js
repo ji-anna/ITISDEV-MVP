@@ -368,6 +368,37 @@ app.get('/adminReserve', async (req, res) => {
     }
 });
 
+app.get('/checkoutUser', async (req, res) => {
+    try {
+        const spaces = await Space.find().lean();
+        const times = [
+            { value: '09:00', display: '09:00 AM' },
+            { value: '09:30', display: '09:30 AM' },
+            { value: '10:00', display: '10:00 AM' },
+            { value: '10:30', display: '10:30 AM' },
+            { value: '11:00', display: '11:00 AM' },
+            { value: '11:30', display: '11:30 AM' },
+            { value: '12:00', display: '12:00 PM' },
+            { value: '12:30', display: '12:30 PM' },
+            { value: '13:00', display: '01:00 PM' },
+            { value: '13:30', display: '01:30 PM' },
+            { value: '14:00', display: '02:00 PM' },
+            { value: '14:30', display: '02:30 PM' },
+            { value: '15:00', display: '03:00 PM' }
+        ];
+        res.render('checkoutUser', { spaces, times });
+    } catch (error) {
+        console.error('Error fetching spaces:', error);
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+});
+
+app.get('/api/reservationsByUser', async (req, res) => {
+    const { userId, date } = req.query;
+    const reservations = await Reservation.find({ userId: userId, date });
+    res.json(reservations);
+});
+
 app.get('/admindeletereserve', async (req, res) => {
     try {
         const spaces = await Space.find().lean();
