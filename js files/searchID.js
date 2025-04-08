@@ -41,6 +41,38 @@ async function markReservationCompleted(userId, slotId, date, time) {
     }
 }
 
+async function updateOverdueReservations() {
+    const today = new Date().toISOString().split('T')[0];
+
+    try {
+        const response = await fetch(`/api/reservations/all`);
+        const reservations = await response.json();
+
+        const overdue = reservations.filter(res => {
+            return res.status === 'active' && res.date < today;
+        });
+
+        for (const res of overdue) {
+            await fetch(`/api/updateReservationStatus`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    reservationId: res._id, // or whatever unique ID your reservation uses
+                    newStatus: 'overtime'
+                }),
+            });
+        }
+
+        if (overdue.length > 0) {
+            console.log(`${overdue.length} reservation(s) marked as overtime.`);
+        }
+
+    } catch (error) {
+        console.error("Error updating overdue reservations:", error);
+    }
+}
 
 
 async function loadAvailability(forcedSpace = null) {
@@ -277,7 +309,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const spaceDropdown = document.getElementById('spaces');
     updateDateTimeDisplay();
 
-    // If dropdown exists but has no value selected, default to "Third Floor"
+    // Check and update overdue reservations on load
+    updateOverdueReservations();
+
     const defaultSpace = "Third Floor";
     if (!spaceDropdown?.value) {
         loadAvailability(defaultSpace);
@@ -293,6 +327,7 @@ document.addEventListener('DOMContentLoaded', () => {
     setInterval(() => {
         updateDateTimeDisplay();
         loadAvailability();
+        updateOverdueReservations(); // Check every minute as well
     }, 60000);
 
     document.getElementById("cancel").addEventListener("click", function () {
@@ -304,7 +339,5 @@ document.addEventListener('DOMContentLoaded', () => {
         const userID = document.getElementById('id')?.value;
         findAndHighlightReservation(userID);
     });
-
-    
 });
 

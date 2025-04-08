@@ -436,6 +436,16 @@ app.get('/adminSearchUser', async (req, res) => {
     }
 });
 
+app.get('/suspendedAccounts', async (req, res) => {
+    try {
+        const users = await User.find().lean();
+        res.render('suspendedAccounts', { users });
+    } catch (error) {
+        console.error('Error fetching users:', error);
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+});
+
 app.post('/submit-registration', async (req, res) => {
     try {
         const { userId, email, password, name, role, department, carPlate } = req.body;
@@ -625,6 +635,40 @@ app.post('/submit-reservation', async (req, res) => {
     }
 });
 
+app.get('/api/reservations/all', isAuthenticated, async (req, res) => {
+    try {
+        const reservations = await Reservation.find({}).sort({ date: 1, time: 1 });
+        res.status(200).json(reservations);
+    } catch (error) {
+        console.error('Error fetching all reservations:', error);
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+});
+
+app.post('/api/updateReservationStatus', isAuthenticated, async (req, res) => {
+    try {
+        const { reservationId, newStatus } = req.body;
+
+        if (!reservationId || !newStatus) {
+            return res.status(400).json({ message: 'Missing required fields.' });
+        }
+
+        const updated = await Reservation.findByIdAndUpdate(
+            reservationId,
+            { status: newStatus },
+            { new: true }
+        );
+
+        if (!updated) {
+            return res.status(404).json({ message: 'Reservation not found.' });
+        }
+
+        res.status(200).json({ success: true, message: 'Status updated.', reservation: updated });
+    } catch (error) {
+        console.error('Error updating reservation status:', error);
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+});
 
 app.get('/api/userReservations', isAuthenticated, async (req, res) => {
     try {
@@ -1010,6 +1054,15 @@ async function initDB() {
             {
                 space: '4th Floor',
                 date: new Date('2025-04-14'),
+                time: '09:30',
+                slotId: '4',
+                anonymous: true,
+                userId: '12279391',
+                status: 'active'
+            },
+            {
+                space: '4th Floor',
+                date: new Date('2025-04-06'),
                 time: '09:30',
                 slotId: '4',
                 anonymous: true,
