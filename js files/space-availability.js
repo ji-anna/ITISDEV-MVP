@@ -40,13 +40,15 @@ async function loadAvailability(forcedSpace = null) {
 
     const reservations = await response.json();
 
+    const activeReservations = reservations.filter(reservation => reservation.status !== 'completed');
+
     const loggedInUser = JSON.parse(sessionStorage.getItem('loggedInUser'));
 
     slots[space].forEach(slot => {
         const slotDiv = document.createElement('div');
         slotDiv.className = 'slot';
 
-        const reservation = reservations.find(res => res.slotId === slot.id);
+        const reservation = activeReservations.find(res => res.slotId === slot.id);
 
         if (reservation) {
             slotDiv.classList.add('space-reserved');
@@ -127,8 +129,11 @@ async function handleReservationLink(space, date, time, slotId) {
             userId: userID
         };
 
-        // Redirect to the details page
-        window.location.href = `/adminReserveDetails?space=${space}&date=${date}&time=${time}&slotId=${slotId}&userId=${userID}`;
+            // Add this line in handleReservationLink before redirect:
+        window.selectedReservation.status = 'active';
+
+        // And include it in the redirect URL:
+        window.location.href = `/adminReserveDetails?space=${space}&date=${date}&time=${time}&slotId=${slotId}&userId=${userID}&status=active`;
 
     }
 }

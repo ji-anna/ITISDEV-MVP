@@ -550,7 +550,7 @@ app.get('/api/users', async (req, res) => {
 
 app.post('/submit-reservation', async (req, res) => {
     try {
-        const { space, date, time, slotId, anonymous, userId } = req.body;
+        const { space, date, time, slotId, anonymous, userId, status } = req.body;
 
         if (!userId) {
             return res.status(400).send('User ID is required.');
@@ -562,7 +562,8 @@ app.post('/submit-reservation', async (req, res) => {
             time,
             slotId,
             anonymous: anonymous === 'on', // handle checkbox
-            userId
+            userId,
+            status
         });
 
         await newReservation.save();
@@ -579,14 +580,14 @@ app.post('/submit-reservation', async (req, res) => {
   // Record ticket usage on reservation
   app.post('/submit-admin-reservation', async (req, res) => {
     try {
-      const { userId, space, date, time, slotId, anonymous, userName } = req.body;
+      const { userId, space, date, time, slotId, anonymous, userName, status } = req.body;
   
       const user = await User.findOne({ userId });
       if (!user || user.ticketCount < 1) {
         return res.status(400).json({ message: 'Insufficient tickets.' });
       }
   
-      const reservation = new Reservation({ space, date, time, slotId, anonymous, userName, userId });
+      const reservation = new Reservation({ space, date, time, slotId, anonymous, userName, userId, status });
       await reservation.save();
   
       // Decrement ticket count and record usage
@@ -596,7 +597,8 @@ app.post('/submit-reservation', async (req, res) => {
         reservationId: reservation._id,
         slotId,
         space,
-        date
+        date,
+        status
       }).save();
   
       res.status(200).json({ message: 'Reservation successful!' });
@@ -659,7 +661,7 @@ app.get('/api/reservation/:id', isAuthenticated, async (req, res) => {
 
 app.post('/api/updateReservation', isAuthenticated, async (req, res) => {
     try {
-        const { reservationId, space, date, time, slotId, anonymous } = req.body;
+        const { reservationId, space, date, time, slotId, anonymous, status } = req.body;
 
         const slotIdNumber = parseInt(slotId, 10);
         if (isNaN(slotIdNumber) || slotIdNumber < 1 || slotIdNumber > 25) {
@@ -672,7 +674,8 @@ app.post('/api/updateReservation', isAuthenticated, async (req, res) => {
             space,
             date,
             time,
-            slotId
+            slotId,
+            status
         });
 
 
@@ -685,7 +688,8 @@ app.post('/api/updateReservation', isAuthenticated, async (req, res) => {
             date,
             time,
             slotId,
-            anonymous
+            anonymous,
+            status
         }, { new: true });
 
         if (reservation) {
@@ -777,7 +781,8 @@ app.get('/userprofile/:username', async (req, res) => {
                     space: reservation.space,
                     date: reservation.date.toDateString(),
                     time: reservation.time,
-                    slotId: reservation.slotId
+                    slotId: reservation.slotId,
+                    status:reservation.status
                 }))
 
             });
@@ -813,7 +818,8 @@ app.get('/adminViewUser/:id', async (req, res) => {
                     date: reservation.date.toDateString(),
                     time: reservation.time,
                     slotId: reservation.slotId,
-                    anonymous: reservation.anonymous ? 'Yes' : 'No'
+                    anonymous: reservation.anonymous ? 'Yes' : 'No',
+                    status: reservation.status
                 }))
 
             });
@@ -872,6 +878,27 @@ app.get('/adminEditReserve', async (req, res) => {
     } catch (error) {
         console.error('Error fetching data:', error);
         res.status(500).json({ message: 'Internal Server Error' });
+    }
+});
+
+app.post('/api/markReservationCompleted', async (req, res) => {
+    const { userId, slotId, date, status } = req.body;
+
+    try {
+        const reservation = await Reservation.findOneAndUpdate(
+            { userId, slotId, date },
+            { status: 'completed' }, // Set the status to completed
+            { new: true } // Return the updated document
+        );
+
+        if (!reservation) {
+            return res.status(404).json({ success: false, message: 'Reservation not found' });
+        }
+
+        res.json({ success: true, message: 'Reservation marked as completed' });
+    } catch (error) {
+        console.error('Error updating reservation status:', error);
+        res.status(500).json({ success: false, message: 'Internal server error' });
     }
 });
 
@@ -958,7 +985,8 @@ async function initDB() {
                 time: '13:46',
                 slotId: '1',
                 anonymous: false,
-                userId: '12279394'
+                userId: '12279394',
+                status: 'active'
             },
             {
                 space: '3rd Floor',
@@ -966,7 +994,8 @@ async function initDB() {
                 time: '09:00',
                 slotId: '2',
                 anonymous: true,
-                userId: '12279395'
+                userId: '12279395',
+                status: 'active'
             },
             {
                 space: '3rd Floor',
@@ -974,7 +1003,8 @@ async function initDB() {
                 time: '09:30',
                 slotId: '4',
                 anonymous: true,
-                userId: '12279396'
+                userId: '12279396',
+                status: 'active'
             },
             {
                 space: '3rd Floor',
@@ -982,7 +1012,8 @@ async function initDB() {
                 time: '09:30',
                 slotId: '2',
                 anonymous: true,
-                userId: '12279392'
+                userId: '12279392',
+                status: 'active'
             },
             {
                 space: '4th Floor',
@@ -990,7 +1021,8 @@ async function initDB() {
                 time: '09:30',
                 slotId: '4',
                 anonymous: true,
-                userId: '12279391'
+                userId: '12279391',
+                status: 'active'
             }
 
 

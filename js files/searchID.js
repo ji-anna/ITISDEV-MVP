@@ -13,6 +13,34 @@ function generateSlots(rows, cols) {
     return slots;
 }
 
+async function markReservationCompleted(userId, slotId, date) {
+    try {
+        const response = await fetch(`/api/markReservationCompleted`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                userId,
+                slotId,
+                date,
+                status: 'completed', // Update status to 'completed'
+            }),
+        });
+
+        const result = await response.json();
+        if (result.success) {
+            alert('Reservation marked as completed.');
+        } else {
+            alert('Failed to mark reservation as completed.');
+        }
+    } catch (error) {
+        console.error('Error marking reservation as completed:', error);
+        alert('Error completing reservation.');
+    }
+}
+
+
 async function loadAvailability(forcedSpace = null) {
     const spaceDropdown = document.getElementById('spaces');
     const space = forcedSpace || spaceDropdown?.value;
@@ -36,9 +64,12 @@ async function loadAvailability(forcedSpace = null) {
 
     availabilityDiv.classList.add('space-availability');
 
+    // Fetch reservations and filter out completed ones
     const response = await fetch(`/api/reservations?space=${space}&date=${selectedDate}`);
-
     const reservations = await response.json();
+
+    // Only keep active reservations
+    const activeReservations = reservations.filter(reservation => reservation.status !== 'completed');
 
     const loggedInUser = JSON.parse(sessionStorage.getItem('loggedInUser'));
 
@@ -46,22 +77,46 @@ async function loadAvailability(forcedSpace = null) {
         const slotDiv = document.createElement('div');
         slotDiv.className = 'slot';
 
-        const reservation = reservations.find(res => res.slotId === slot.id);
+        const reservation = activeReservations.find(res => res.slotId === slot.id);
 
-        
         if (reservation) {
             slotDiv.classList.add('space-reserved');
-        
+
             if (loggedInUser.role === 'technician') {
                 const infoDiv = document.createElement('div');
                 infoDiv.textContent = reservation.anonymous
                     ? 'Reserved (Anonymous)'
                     : `ID: ${reservation.userId}`;
                 slotDiv.appendChild(infoDiv);
+
+                // Allow technician to click and visually "remove" reservation
+                slotDiv.addEventListener('click', () => {
+                    const confirmRemove = confirm('Complete Reservation. Mark as Completed?');
+                    if (confirmRemove) {
+                        // Clear the reservation visually
+                        slotDiv.innerHTML = 'Available';
+                        slotDiv.classList.remove('space-reserved');
+                        slotDiv.classList.add('space-available');
+                        
+                        const slotName = document.createElement('div');
+                        slotName.textContent = slot.slot;
+                        slotDiv.appendChild(slotName);
+                
+                        // Re-enable click for technician to reserve this slot
+                        slotDiv.addEventListener('click', () => {
+                            handleReservationLink(space, selectedDate, selectedTime, slot.id);
+                            highlightSlot(slotDiv);
+                        });
+
+                        // Send request to backend to mark reservation as completed
+                        markReservationCompleted(reservation.userId, reservation.slotId, selectedDate);
+                    }
+                });
+
             } else {
                 slotDiv.textContent = 'Reserved';
             }
-        
+
         } else {
             slot.available = true;
             slot.reservationDate = null;
@@ -87,6 +142,7 @@ async function loadAvailability(forcedSpace = null) {
         availabilityDiv.appendChild(slotDiv);
     });
 }
+
 
 
 // Function to clear existing slots
