@@ -48,14 +48,20 @@ async function loadAvailability(forcedSpace = null) {
 
         const reservation = reservations.find(res => res.slotId === slot.id);
 
+        
         if (reservation) {
-            const userLink = document.createElement('a');
-            userLink.textContent = reservation.anonymous ? 'Anonymous' : reservation.userID;
-            if (!reservation.anonymous) {
-                userLink.href = `/userprofile/${encodeURIComponent(reservation.userName)}`;
-            }
-            slotDiv.appendChild(userLink);
             slotDiv.classList.add('space-reserved');
+        
+            if (loggedInUser.role === 'technician') {
+                const infoDiv = document.createElement('div');
+                infoDiv.textContent = reservation.anonymous
+                    ? 'Reserved (Anonymous)'
+                    : `ID: ${reservation.userId}`;
+                slotDiv.appendChild(infoDiv);
+            } else {
+                slotDiv.textContent = 'Reserved';
+            }
+        
         } else {
             slot.available = true;
             slot.reservationDate = null;
@@ -187,12 +193,16 @@ async function findAndHighlightReservation(userID) {
 
         const allSlots = document.querySelectorAll('.slot');
         allSlots.forEach(slotDiv => {
-            const userLink = slotDiv.querySelector('a');
-            if (userLink && userLink.textContent === reservation.userID) {
-                highlightSlot(slotDiv);
+            slotDiv.classList.remove('highlighted-id'); // remove previous highlights if any
+
+            const infoDiv = slotDiv.querySelector('div');
+            if (infoDiv && infoDiv.textContent.includes(reservation.userId)) {
+                highlightSlot(slotDiv); // optional: uses 'selected-slot' styling
+                slotDiv.classList.add('highlighted-id'); // apply custom highlight
                 slotDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }
         });
+
 
     } catch (error) {
         console.error("Error finding reservation:", error);

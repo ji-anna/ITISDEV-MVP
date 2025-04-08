@@ -49,14 +49,20 @@ async function loadAvailability(forcedSpace = null) {
         const reservation = reservations.find(res => res.slotId === slot.id);
 
         if (reservation) {
-            const userLink = document.createElement('a');
-            userLink.textContent = reservation.anonymous ? 'Anonymous' : reservation.userID;
-            if (!reservation.anonymous) {
-                userLink.href = `/userprofile/${encodeURIComponent(reservation.userName)}`;
-            }
-            slotDiv.appendChild(userLink);
             slotDiv.classList.add('space-reserved');
+        
+            if (loggedInUser.role === 'technician') {
+                const infoDiv = document.createElement('div');
+                infoDiv.textContent = reservation.anonymous
+                    ? 'Reserved (Anonymous)'
+                    : `ID: ${reservation.userId}`;
+                slotDiv.appendChild(infoDiv);
+            } else {
+                slotDiv.textContent = 'Reserved';
+            }
+        
         } else {
+        
             slot.available = true;
             slot.reservationDate = null;
 
