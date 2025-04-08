@@ -406,7 +406,7 @@ app.get('/adminSearchUser', async (req, res) => {
 
 app.post('/submit-registration', async (req, res) => {
     try {
-        const { userId, email, password, name, role, department } = req.body;
+        const { userId, email, password, name, role, department, carPlate } = req.body;
         const image = req.files?.image;
 
         const existingUserId = await User.findOne({ userId });
@@ -433,6 +433,7 @@ app.post('/submit-registration', async (req, res) => {
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
 
+        // Only add carPlate to the user object if the role is student
         const newUser = new User({
             userId,
             email,
@@ -440,7 +441,8 @@ app.post('/submit-registration', async (req, res) => {
             name,
             role,
             department,
-            profileImg
+            profileImg,
+            carPlate: role === 'student' ? carPlate : undefined // Add carPlate only if student
         });
 
         await newUser.save();
@@ -450,6 +452,7 @@ app.post('/submit-registration', async (req, res) => {
         res.status(500).json({ message: 'Internal Server Error' });
     }
 });
+
 
 
 // LOGIN

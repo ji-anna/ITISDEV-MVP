@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.getElementById('profileRole').textContent = loggedInUser.role;
         document.getElementById('profileDepartment').textContent = loggedInUser.department;
         document.getElementById('profileDescription').textContent = loggedInUser.profileDesc;
+        document.getElementById('plateNumber').textContent = loggedInUser.carPlate;
 
         const firstName = loggedInUser.name.split(' ')[0].toLowerCase();
         const profileImage = document.getElementById('profileImage');

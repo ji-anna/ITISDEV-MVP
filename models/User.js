@@ -9,6 +9,7 @@ const userSchema = new mongoose.Schema({
     department: { type: String, required: true },
     profileImg: { type: String, default: '/assets/default.jpg' },
     profileDesc: { type: String, default: 'I am from DLSU' },
+    carPlate: { type: String, required: false },
 
     // 🟢 Ticket-related field
     ticketCount: { type: Number, default: 0 } // Number of available tickets (auto-deducts when reserved)

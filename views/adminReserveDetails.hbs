@@ -39,7 +39,6 @@
         <input type="hidden" name="slotId" value="{{slotId}}">
         <input type="hidden" name="userId" value="{{userId}}">
 
-
             <input type="checkbox" id="anonymous" name="anonymous">
             <label for="anonymous">{{#if reserveAnonymouslyText}}{{reserveAnonymouslyText}}{{else}}Reserve Anonymously{{/if}}</label>
 
@@ -57,5 +56,12 @@
 
 <script src="/js files/main.js"></script>
 <script src="js files/adminReserve.js"></script>
+
+<script>
+    document.getElementById('backButton').addEventListener('click', function() {
+        window.history.back();
+    });
+</script>
+
 </body>
 </html>
