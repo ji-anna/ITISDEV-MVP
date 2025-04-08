@@ -316,6 +316,7 @@ app.get('/profilepage', async (req, res) => {
 
         res.render('profilepage', {
             name: user.name,
+            userId: user.userId,
             email: user.email,
             role: user.role,
             department: user.department,

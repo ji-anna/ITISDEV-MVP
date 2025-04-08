@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     if (loggedInUser) {
         document.getElementById('profileName').textContent = loggedInUser.name;
+        document.getElementById('userId').textContent = loggedInUser.userId;
         document.getElementById('profileEmail').textContent = loggedInUser.email;
         document.getElementById('profileRole').textContent = loggedInUser.role;
         document.getElementById('profileDepartment').textContent = loggedInUser.department;
