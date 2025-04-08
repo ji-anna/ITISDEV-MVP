@@ -13,7 +13,7 @@ function generateSlots(rows, cols) {
     return slots;
 }
 
-async function markReservationCompleted(userId, slotId, date) {
+async function markReservationCompleted(userId, slotId, date, time) {
     try {
         const response = await fetch(`/api/markReservationCompleted`, {
             method: 'POST',
@@ -24,7 +24,8 @@ async function markReservationCompleted(userId, slotId, date) {
                 userId,
                 slotId,
                 date,
-                status: 'completed', // Update status to 'completed'
+                time,
+                status: 'completed',
             }),
         });
 
@@ -39,6 +40,7 @@ async function markReservationCompleted(userId, slotId, date) {
         alert('Error completing reservation.');
     }
 }
+
 
 
 async function loadAvailability(forcedSpace = null) {
@@ -109,7 +111,8 @@ async function loadAvailability(forcedSpace = null) {
                         });
 
                         // Send request to backend to mark reservation as completed
-                        markReservationCompleted(reservation.userId, reservation.slotId, selectedDate);
+                        markReservationCompleted(reservation.userId, reservation.slotId, selectedDate, reservation.time);
+
                     }
                 });
 

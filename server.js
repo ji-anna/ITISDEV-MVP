@@ -882,13 +882,13 @@ app.get('/adminEditReserve', async (req, res) => {
 });
 
 app.post('/api/markReservationCompleted', async (req, res) => {
-    const { userId, slotId, date, status } = req.body;
+    const { userId, slotId, date, time, status } = req.body;
 
     try {
         const reservation = await Reservation.findOneAndUpdate(
-            { userId, slotId, date },
-            { status: 'completed' }, // Set the status to completed
-            { new: true } // Return the updated document
+            { userId, slotId, date, time }, // Now matching by time too
+            { status: 'completed' },
+            { new: true }
         );
 
         if (!reservation) {
