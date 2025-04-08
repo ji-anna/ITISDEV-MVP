@@ -118,7 +118,7 @@ async function loadAvailability(forcedSpace = null) {
         const reservation = activeReservations.find(res => res.slotId === slot.id);
 
         if (reservation) {
-            if (reservation.status === 'i') {
+            if (reservation.status === 'overtime') {
                 slotDiv.classList.add('space-overtime');
             } else {
                 slotDiv.classList.add('space-reserved');

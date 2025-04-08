@@ -36,24 +36,38 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 });
 
-    function displayReservations(reservations) {
-    const tableBody = document.querySelector('#userReservations tbody');
-    tableBody.innerHTML = '';
+function displayReservations(reservations) {
+    const activeTableBody = document.querySelector('#userReservations tbody');
+    const overtimeTableBody = document.querySelector('#overtimeReservations tbody');
+    activeTableBody.innerHTML = '';
+    overtimeTableBody.innerHTML = '';
 
     reservations.forEach((reservation) => {
         const row = document.createElement('tr');
-        row.innerHTML = `
-            <td>${reservation.space}</td>
-            <td>${new Date(reservation.date).toLocaleDateString()}</td>
-            <td>${reservation.time}</td>
-            <td>${reservation.slotId}</td>
-            <td>${reservation.anonymous ? 'Yes' : 'No'}</td>
 
-        `;
-        tableBody.appendChild(row);
+        if (reservation.status === 'overtime') {
+            row.innerHTML = `
+                <td>${reservation.space}</td>
+                <td>${new Date(reservation.date).toLocaleDateString()}</td>
+                <td>${reservation.time}</td>
+                <td>${reservation.slotId}</td>
+                <td>${reservation.anonymous ? 'Yes' : 'No'}</td>
+                <td>₱1,200</td>
+            `;
+            overtimeTableBody.appendChild(row);
+        } else {
+            row.innerHTML = `
+                <td>${reservation.space}</td>
+                <td>${new Date(reservation.date).toLocaleDateString()}</td>
+                <td>${reservation.time}</td>
+                <td>${reservation.slotId}</td>
+                <td>${reservation.anonymous ? 'Yes' : 'No'}</td>
+            `;
+            activeTableBody.appendChild(row);
+        }
     });
-
 }
+
 
 cancelButton.addEventListener('click', async () => {
     const loggedInUser = JSON.parse(sessionStorage.getItem('loggedInUser'));
