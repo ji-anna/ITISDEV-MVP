@@ -25,7 +25,7 @@
     <div class="container">
 
         <h1>Users List</h1>
-        <input type="text" id="search" placeholder="Search users by name">
+        <input type="text" id="search" placeholder="Search users by student ID">
         <table id="user-list">
             <thead>
                 <tr>
@@ -39,7 +39,7 @@
             <tbody id="user-table-body">
                 {{#users}}
                 <tr>
-                    <td>{{id}}</td>
+                    <td>{{userId}}</td>
                     <td>{{name}}</td>
                     <td>{{email}}</td>
                     <td>{{role}}</td>

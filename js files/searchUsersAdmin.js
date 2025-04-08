@@ -1,5 +1,5 @@
 async function searchUsers(searchTerm) {
-    const response = await fetch(`/api/usersAdmin?name=${encodeURIComponent(searchTerm)}`);
+    const response = await fetch(`/api/usersAdmin?userId=${encodeURIComponent(searchTerm)}`);
     const users = await response.json();
     const tableBody = document.getElementById('user-table-body');
     tableBody.innerHTML = '';
@@ -7,8 +7,8 @@ async function searchUsers(searchTerm) {
     users.forEach((user) => {
         const rowHTML = `
             <tr>
-                <td>${user.userId}</td>
-                <td><a href="/adminViewUser/${user._id}">${user.name}</a></td>
+                <td><a href="/adminViewUser/${user._id}">${user.userId}</a></td>
+                <td>${user.name}</td>
                 <td>${user.email}</td>
                 <td>${user.role}</td>
                 <td>${user.department}</td>

@@ -766,8 +766,8 @@ app.get('/api/searchUsers', async (req, res) => {
 
 app.get('/api/usersAdmin', async (req, res) => {
     try {
-        const searchTerm = req.query.name;
-        const users = await User.find({ name: { $regex: searchTerm, $options: 'i' } });
+        const searchTerm = req.query.userId;
+        const users = await User.find({ userId: { $regex: searchTerm, $options: 'i' } });
         res.status(200).json(users);
     } catch (error) {
         console.error('Error searching users:', error);
