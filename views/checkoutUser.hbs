@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Parking SpaceAvailability - Admin</title>
+    <link rel="stylesheet" href="css styles/spaceavail.css">
+</head>
+<body>
+
+<header>
+    <nav class="navbar-container">
+        <div class="logo-container">
+            <img src="assets/logowhite.PNG" alt="Logo">
+        </div>
+        <ul class="nav-links">
+            <li><a href="/adminMenu">Home</a></li>
+            <li><a href="/adminreserve">Reserve</a></li>
+            <li><a href="/adminSearchUser">Search user</a></li>
+            <li><a href="/" id= "logoutButton">Logout</a></li>
+        </ul>
+    </nav>
+</header>
+
+<div class="container">
+    <h1>Parking Space Availability</h1>
+
+    <div>
+        <label for="spaces">Choose a slot:</label>
+        <select id="spaces">
+            {{#each spaces}}
+                <option value="{{this.name}}">{{this.location}}</option>
+            {{/each}}
+        </select>
+    </div>
+
+    <div class="input-group">
+        <div class="date-select">
+            <label for="date">Date:</label>
+            <input type="text" class="datetime-field" id="date" readonly placeholder="yyyy-mm-dd">
+        </div>
+
+        <div class="time-select">
+            <label for="time">Time:</label>
+            <input type="text" class="datetime-field" id="time" readonly placeholder="hh:mm">
+        </div>
+
+
+    </div>
+
+    <label for="id">ID number:</label>
+    <input type="text" id="id" required="true">
+    <button id="search-id-button" class="button" type="button">Search ID</button>
+
+
+    <div id="space-availability" class="space-availability">
+       
+    </div>
+
+    <div class="button-grp">
+        <button type="submit" class="button" id="submit" style="display:none;">Submit</button>
+        <button type="button" class="button" id="cancel">Cancel</button>
+    </div>
+</div>
+
+<script src="js files/searchID.js"></script>
+<script src="/js files/main.js"></script>
+</body>
+</html>
