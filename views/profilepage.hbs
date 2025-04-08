@@ -59,30 +59,65 @@
                 <span id="plateNumber">{{user.plateNumber}}</span>
             </div>
             <div class="reservations-section">
-                <h1>My Reservations</h1>
-                <table id="userReservations">
-                    <thead>
-                        <tr>
-                            <th>Floor</th>
-                            <th>Date</th>
-                            <th>Time</th>
-                            <th>Slot ID</th>
-                            <th>Anonymous</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {{#each reservations}}
-                        <tr>
-                            <td>{{this.space}}</td>
-                            <td>{{this.date}}</td>
-                            <td>{{this.time}}</td>
-                            <td>{{this.slotId}}</td>
-                            <td>{{#if this.anonymous}}Yes{{else}}No{{/if}}</td>
-                        </tr>
-                        {{/each}}
-                    </tbody>
-                </table>
-            </div>
+    <h1>My Reservations</h1>
+
+    <!-- Regular Reservations -->
+    <h2>Active Reservations</h2>
+    <table id="userReservations">
+        <thead>
+            <tr>
+                <th>Floor</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Slot ID</th>
+                <th>Anonymous</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each reservations}}
+                {{#unless (eq this.status "overtime")}}
+                <tr>
+                    <td>{{this.space}}</td>
+                    <td>{{this.date}}</td>
+                    <td>{{this.time}}</td>
+                    <td>{{this.slotId}}</td>
+                    <td>{{#if this.anonymous}}Yes{{else}}No{{/if}}</td>
+                </tr>
+                {{/unless}}
+            {{/each}}
+        </tbody>
+    </table>
+
+    <!-- Overtime Reservations -->
+    <h2>Overtime Reservations</h2>
+    <table id="overtimeReservations">
+        <thead>
+            <tr>
+                <th>Floor</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Slot ID</th>
+                <th>Anonymous</th>
+                <th>Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each reservations}}
+                {{#if (eq this.status "overtime")}}
+                <tr>
+                    <td>{{this.space}}</td>
+                    <td>{{this.date}}</td>
+                    <td>{{this.time}}</td>
+                    <td>{{this.slotId}}</td>
+                    <td>{{#if this.anonymous}}Yes{{else}}No{{/if}}</td>
+                    <td>₱1,200</td>
+                </tr>
+                {{/if}}
+            {{/each}}
+        </tbody>
+    </table>
+</div>
+
 
         </div>
 

@@ -47,6 +47,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             <td>${new Date(reservation.date).toLocaleDateString()}</td>
             <td>${reservation.time}</td>
             <td>${reservation.slotId}</td>
+             <td>${reservation.slotId}</td>
             <td>${reservation.anonymous ? 'Yes' : 'No'}</td>
 
         `;
