@@ -75,7 +75,7 @@
         </thead>
         <tbody>
             {{#each reservations}}
-                {{#unless (eq this.status "overtime")}}
+                {{#unless (eq this.status "overnight")}}
                 <tr>
                     <td>{{this.space}}</td>
                     <td>{{this.date}}</td>
@@ -103,7 +103,7 @@
         </thead>
         <tbody>
             {{#each reservations}}
-                {{#if (eq this.status "overtime")}}
+                {{#if (eq this.status "overnight")}}
                 <tr>
                     <td>{{this.space}}</td>
                     <td>{{this.date}}</td>

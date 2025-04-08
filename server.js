@@ -14,14 +14,14 @@ app.use(fileUpload());
 
 mongoose.connect('mongodb://localhost/ParkingResDB');
 
-// Register the 'eq' helper here
+
 const handlebars = hbs.create({
     helpers: {
         eq: (a, b) => a === b
     }
 });
 
-// Tell Express to use this engine
+
 app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
 
@@ -336,7 +336,7 @@ app.get('/profilepage', async (req, res) => {
                 space: reservation.parkingFloor,
                 date: reservation.resStartSched.toDateString(),
                 time: `${reservation.resStartSched.toLocaleTimeString()} - ${reservation.resEndSched.toLocaleTimeString()}`,
-                slotID: reservation.reservationID,
+                slotId: reservation.reservationID,
                 status: reservation.status 
             }))
         });

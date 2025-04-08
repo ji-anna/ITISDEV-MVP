@@ -98,26 +98,16 @@ async function loadAvailability(forcedSpace = null) {
 
     availabilityDiv.classList.add('space-availability');
 
-<<<<<<< Updated upstream
-    // Fetch reservations and filter out completed ones
+
     const response = await fetch(`/api/reservations?space=${space}`);
     const reservations = await response.json();
 
-    // Only keep active reservations
     const activeReservations = reservations.filter(reservation => {
         const resDate = new Date(reservation.date).toISOString().split('T')[0];
         return reservation.status === 'overtime' ||
                (reservation.status === 'active' && resDate === selectedDate);
     });
     
-=======
- 
-    const response = await fetch(`/api/reservations?space=${space}&date=${selectedDate}`);
-    const reservations = await response.json();
-
-
-    const activeReservations = reservations.filter(reservation => reservation.status !== 'completed');
->>>>>>> Stashed changes
 
     const loggedInUser = JSON.parse(sessionStorage.getItem('loggedInUser'));
 
@@ -161,13 +151,8 @@ async function loadAvailability(forcedSpace = null) {
                             highlightSlot(slotDiv);
                         });
 
-<<<<<<< Updated upstream
-                        // Send request to backend to mark reservation as completed
-                        markReservationCompleted(reservation.userId, reservation.slotId, reservation.date, reservation.time);
-=======
 
-                        markReservationCompleted(reservation.userId, reservation.slotId, selectedDate, reservation.time);
->>>>>>> Stashed changes
+                        markReservationCompleted(reservation.userId, reservation.slotId, reservation.date, reservation.time);
 
                     }
                 });
