@@ -160,7 +160,7 @@ app.get('/receipt', isAuthenticated, isStudent, (req, res) => {
     res.render('receipt', data);
   });
 
-  // Check ticket eligibility (AJAX for admin)
+  // Check ticket eligibility
 app.get('/api/checkTicketEligibility', async (req, res) => {
     try {
       const user = await User.findOne({ userId: req.query.userId });
@@ -487,7 +487,7 @@ app.post('/submit-registration', async (req, res) => {
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
 
-        // Only add carPlate to the user object if the role is student
+   
         const newUser = new User({
             userId,
             email,
@@ -496,7 +496,7 @@ app.post('/submit-registration', async (req, res) => {
             role,
             department,
             profileImg,
-            carPlate: role === 'student' ? carPlate : undefined // Add carPlate only if student
+            carPlate: role === 'student' ? carPlate : undefined 
         });
 
         await newUser.save();
@@ -933,7 +933,7 @@ app.post('/api/markReservationCompleted', async (req, res) => {
 
     try {
         const reservation = await Reservation.findOneAndUpdate(
-            { userId, slotId, date, time }, // Now matching by time too
+            { userId, slotId, date, time },
             { status: 'completed' },
             { new: true }
         );
@@ -968,7 +968,9 @@ async function initDB() {
                 department: 'CCS',
                 profileImg: '/assets/wonwoo.jpg',
                 profileDesc: 'I love coding.',
-                userId: '12279391'
+                userId: '12279391',
+                carPlate:'ABC123',
+                ticketCount: 10
             },
             {
                 name: 'Mingyu Kim',
@@ -978,7 +980,9 @@ async function initDB() {
                 department: 'CCS',
                 profileImg: '/assets/mingyu.jpg',
                 profileDesc: 'i also love coding',
-                userId: '12279392'
+                userId: '12279392',
+                carPlate:'DEF456',
+                ticketCount: 10
             },
             {
                 name: 'Jin Kim',
@@ -988,7 +992,9 @@ async function initDB() {
                 department: 'COB',
                 profileImg: '/assets/jin.jpg',
                 profileDesc: 'i love business',
-                userId: '12279396'
+                userId: '12279396',
+                carPlate:'GHI789',
+                ticketCount: 10
             },
             {
                 name: 'Momo Hirai',
@@ -998,7 +1004,9 @@ async function initDB() {
                 department: 'COE',
                 profileImg: '/assets/momo.jpg',
                 profileDesc: 'i love economics',
-                userId: '12279395'
+                userId: '12279395',
+                carPlate:'JKL901',
+                ticketCount: 10
             },
             {
                 name: 'Jake Sim',
@@ -1008,7 +1016,9 @@ async function initDB() {
                 department: 'CCS',
                 profileImg: '/assets/jake.jpg',
                 profileDesc: 'i love computer science',
-                userId: '12279394'
+                userId: '12279394',
+                carPlate:'MNO234',
+                ticketCount: 10
             },
             {
                 name: 'Seulgi Kang',
@@ -1018,7 +1028,9 @@ async function initDB() {
                 department: 'CCS',
                 profileImg: '/assets/seulgi.jpg',
                 profileDesc: 'i love coding and teaching',
-                userId: '12279393'
+                userId: '12279393',
+                carPlate:'PQR567',
+                ticketCount: 10
             }
 
 
@@ -1037,7 +1049,7 @@ async function initDB() {
             },
             {
                 space: '3rd Floor',
-                date: new Date('2025-04-11'),
+                date: new Date('2025-04-10'),
                 time: '09:00',
                 slotId: '2',
                 anonymous: true,
@@ -1046,7 +1058,7 @@ async function initDB() {
             },
             {
                 space: '3rd Floor',
-                date: new Date('2025-04-12'),
+                date: new Date('2025-04-10'),
                 time: '09:30',
                 slotId: '4',
                 anonymous: true,
@@ -1055,7 +1067,7 @@ async function initDB() {
             },
             {
                 space: '3rd Floor',
-                date: new Date('2025-04-13'),
+                date: new Date('2025-04-10'),
                 time: '09:30',
                 slotId: '2',
                 anonymous: true,
@@ -1064,7 +1076,7 @@ async function initDB() {
             },
             {
                 space: '4th Floor',
-                date: new Date('2025-04-14'),
+                date: new Date('2025-04-10'),
                 time: '09:30',
                 slotId: '4',
                 anonymous: true,
@@ -1073,7 +1085,7 @@ async function initDB() {
             },
             {
                 space: '4th Floor',
-                date: new Date('2025-04-06'),
+                date: new Date('2025-04-10'),
                 time: '09:30',
                 slotId: '4',
                 anonymous: false,
@@ -1127,7 +1139,7 @@ app.listen(port, async () => {
     await initDB();
 });
 
-const ticketRoutes = require('./js files/ticketRoutes'); // adjust path if needed
-app.use('/api', ticketRoutes); // or app.use('/api', ticketRoutes);
+const ticketRoutes = require('./js files/ticketRoutes');
+app.use('/api', ticketRoutes);
 
   

@@ -1,5 +1,5 @@
-const slots = {}; // Store slots for each space
-const generatedSpaces = new Set(); // Track which spaces have been generated
+const slots = {};
+const generatedSpaces = new Set();
 
 function generateSlots(rows, cols) {
     const slots = [];
@@ -59,7 +59,7 @@ async function updateOverdueReservations() {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    reservationId: res._id, // or whatever unique ID your reservation uses
+                    reservationId: res._id,
                     newStatus: 'overtime'
                 }),
             });
@@ -88,7 +88,7 @@ async function loadAvailability(forcedSpace = null) {
     generatedSpaces.clear();
 
     if (!generatedSpaces.has(space)) {
-        slots[space] = generateSlots(5, 5); // or whatever dimensions apply to Third Floor
+        slots[space] = generateSlots(5, 5); 
         generatedSpaces.add(space);
     }
 
@@ -98,6 +98,7 @@ async function loadAvailability(forcedSpace = null) {
 
     availabilityDiv.classList.add('space-availability');
 
+<<<<<<< Updated upstream
     // Fetch reservations and filter out completed ones
     const response = await fetch(`/api/reservations?space=${space}`);
     const reservations = await response.json();
@@ -109,6 +110,14 @@ async function loadAvailability(forcedSpace = null) {
                (reservation.status === 'active' && resDate === selectedDate);
     });
     
+=======
+ 
+    const response = await fetch(`/api/reservations?space=${space}&date=${selectedDate}`);
+    const reservations = await response.json();
+
+
+    const activeReservations = reservations.filter(reservation => reservation.status !== 'completed');
+>>>>>>> Stashed changes
 
     const loggedInUser = JSON.parse(sessionStorage.getItem('loggedInUser'));
 
@@ -134,11 +143,11 @@ async function loadAvailability(forcedSpace = null) {
 
                 slotDiv.appendChild(infoDiv);
 
-                // Allow technician to click and visually "remove" reservation
+
                 slotDiv.addEventListener('click', () => {
                     const confirmRemove = confirm('Complete Reservation. Mark as Completed?');
                     if (confirmRemove) {
-                        // Clear the reservation visually
+
                         slotDiv.innerHTML = 'Available';
                         slotDiv.classList.remove('space-reserved');
                         slotDiv.classList.add('space-available');
@@ -146,15 +155,19 @@ async function loadAvailability(forcedSpace = null) {
                         const slotName = document.createElement('div');
                         slotName.textContent = slot.slot;
                         slotDiv.appendChild(slotName);
-                
-                        // Re-enable click for technician to reserve this slot
+
                         slotDiv.addEventListener('click', () => {
                             handleReservationLink(space, selectedDate, selectedTime, slot.id);
                             highlightSlot(slotDiv);
                         });
 
+<<<<<<< Updated upstream
                         // Send request to backend to mark reservation as completed
                         markReservationCompleted(reservation.userId, reservation.slotId, reservation.date, reservation.time);
+=======
+
+                        markReservationCompleted(reservation.userId, reservation.slotId, selectedDate, reservation.time);
+>>>>>>> Stashed changes
 
                     }
                 });
@@ -191,7 +204,7 @@ async function loadAvailability(forcedSpace = null) {
 
 
 
-// Function to clear existing slots
+
 function clearSlots() {
     const availabilityDiv = document.getElementById('space-availability');
     while (availabilityDiv.firstChild) {
@@ -219,7 +232,7 @@ async function handleReservationLink(space, date, time, slotId) {
             return;
         }
 
-        // Prepare data for the reservation
+
         window.selectedReservation = {
             space,
             date,
@@ -229,7 +242,7 @@ async function handleReservationLink(space, date, time, slotId) {
             userId: userID
         };
 
-        // Redirect to the details page
+
         window.location.href = `/adminReserveDetails?space=${space}&date=${date}&time=${time}&slotId=${slotId}&userId=${userID}`;
 
     }
@@ -291,7 +304,7 @@ async function findAndHighlightReservation(userID) {
         }
 
 
-        const reservation = reservations[0]; // If user has multiple, just use the first for now
+        const reservation = reservations[0];
 
 
         const spaceDropdown = document.getElementById('spaces');
@@ -320,7 +333,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const spaceDropdown = document.getElementById('spaces');
     updateDateTimeDisplay();
 
-    // Check and update overdue reservations on load
+
     updateOverdueReservations();
 
     const defaultSpace = "Third Floor";
@@ -338,7 +351,7 @@ document.addEventListener('DOMContentLoaded', () => {
     setInterval(() => {
         updateDateTimeDisplay();
         loadAvailability();
-        updateOverdueReservations(); // Check every minute as well
+        updateOverdueReservations();
     }, 60000);
 
     document.getElementById("cancel").addEventListener("click", function () {

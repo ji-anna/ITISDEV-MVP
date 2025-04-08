@@ -11,4 +11,3 @@ const ticketUsageSchema = new mongoose.Schema({
   
   module.exports = mongoose.model('TicketUsage', ticketUsageSchema);
 
-  //for when students use their ticket

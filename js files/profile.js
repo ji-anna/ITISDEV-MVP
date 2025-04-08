@@ -46,8 +46,13 @@ document.addEventListener('DOMContentLoaded', async () => {
             <td>${reservation.space}</td>
             <td>${new Date(reservation.date).toLocaleDateString()}</td>
             <td>${reservation.time}</td>
+<<<<<<< Updated upstream
             <td>${reservation.slotId}</td>
              <td>${reservation.slotId}</td>
+=======
+            <td>${reservation.slotId}</t
+            d>
+>>>>>>> Stashed changes
             <td>${reservation.anonymous ? 'Yes' : 'No'}</td>
 
         `;

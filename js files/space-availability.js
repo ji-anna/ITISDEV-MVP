@@ -1,5 +1,5 @@
-const slots = {}; // Store slots for each space
-const generatedSpaces = new Set(); // Track which spaces have been generated
+const slots = {}; 
+const generatedSpaces = new Set();
 
 function generateSlots(rows, cols) {
     const slots = [];
@@ -26,7 +26,7 @@ async function loadAvailability(forcedSpace = null) {
     generatedSpaces.clear();
 
     if (!generatedSpaces.has(space)) {
-        slots[space] = generateSlots(5, 5); // or whatever dimensions apply to Third Floor
+        slots[space] = generateSlots(5, 5); 
         generatedSpaces.add(space);
     }
 
@@ -103,7 +103,7 @@ async function loadAvailability(forcedSpace = null) {
 }
 
 
-// Function to clear existing slots
+
 function clearSlots() {
     const availabilityDiv = document.getElementById('space-availability');
     while (availabilityDiv.firstChild) {
@@ -131,7 +131,7 @@ async function handleReservationLink(space, date, time, slotId) {
             return;
         }
 
-        // Prepare data for the reservation
+
         window.selectedReservation = {
             space,
             date,
@@ -141,10 +141,10 @@ async function handleReservationLink(space, date, time, slotId) {
             userId: userID
         };
 
-            // Add this line in handleReservationLink before redirect:
+
         window.selectedReservation.status = 'active';
 
-        // And include it in the redirect URL:
+
         window.location.href = `/adminReserveDetails?space=${space}&date=${date}&time=${time}&slotId=${slotId}&userId=${userID}&status=active`;
 
     }
@@ -223,7 +223,7 @@ document.addEventListener('DOMContentLoaded', () => {
     updateDateTimeDisplay();
     updateOverdueReservations();
 
-    // If dropdown exists but has no value selected, default to "Third Floor"
+
     const defaultSpace = "Third Floor";
     if (!spaceDropdown?.value) {
         loadAvailability(defaultSpace);

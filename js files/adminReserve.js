@@ -14,7 +14,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const initialSeatId = urlParams.get('seatId');
     const initialUserId = urlParams.get('userId');
 
-    // Update the UI
     labSelect.textContent = initialLab || 'Not selected';
     dateSelect.textContent = initialDate ? new Date(initialDate).toLocaleDateString() : 'Not selected';
     timeSelect.textContent = initialTime || 'Not selected';
