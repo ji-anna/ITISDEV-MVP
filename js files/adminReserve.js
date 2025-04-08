@@ -12,14 +12,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const initialDate = urlParams.get('date');
     const initialTime = urlParams.get('time');
     const initialSeatId = urlParams.get('seatId');
-    const initialUserId = urlParams.get('userId'); // 👈 get userId from URL
+    const initialUserId = urlParams.get('userId');
 
     // Update the UI
     labSelect.textContent = initialLab || 'Not selected';
     dateSelect.textContent = initialDate ? new Date(initialDate).toLocaleDateString() : 'Not selected';
     timeSelect.textContent = initialTime || 'Not selected';
     seatSelect.textContent = initialSeatId ? `Seat ${initialSeatId}` : 'Not selected';
-    studentId.textContent = initialUserId || 'Not provided'; // 👈 Display userId
+    studentId.textContent = initialUserId || 'Not provided';
 
     async function submitReservation(event) {
         event.preventDefault();
@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
             date: initialDate,
             time: initialTime,
             seatId: initialSeatId,
-            userId: initialUserId, // 👈 Send userId instead of userName
+            userId: initialUserId,
             anonymous
         };
 
