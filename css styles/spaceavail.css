@@ -71,9 +71,16 @@ h1 {
     border-radius: 10px;
   }  
 
-.highlighted-id {
-    background-color: #deb839; /* yellow highlight */
-    border: solid 2px #2d7814;
+  .selected-slot {
+    border: 2px solid #2d7814;
+    background-color: #ddd253;
+    animation: pulse 1s ease-in-out 2;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
 }
 
 .container {

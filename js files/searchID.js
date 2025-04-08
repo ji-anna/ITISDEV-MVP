@@ -233,34 +233,37 @@ async function findAndHighlightReservation(userID) {
         return;
     }
 
+
     const date = new Date().toISOString().split('T')[0];
+
 
     try {
         const response = await fetch(`/api/reservationsByUser?userId=${userID}&date=${date}`);
         const reservations = await response.json();
+
 
         if (!reservations.length) {
             alert("No reservations found for this ID today.");
             return;
         }
 
+
         const reservation = reservations[0]; // If user has multiple, just use the first for now
+
 
         const spaceDropdown = document.getElementById('spaces');
         spaceDropdown.value = reservation.space;
         await loadAvailability(reservation.space);
 
-        const allSlots = document.querySelectorAll('.slot');
-        allSlots.forEach(slotDiv => {
-            slotDiv.classList.remove('highlighted-id'); // remove previous highlights if any
 
-            const infoDiv = slotDiv.querySelector('div');
-            if (infoDiv && infoDiv.textContent.includes(reservation.userId)) {
-                highlightSlot(slotDiv); // optional: uses 'selected-slot' styling
-                slotDiv.classList.add('highlighted-id'); // apply custom highlight
-                slotDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }
-        });
+        const allSlots = document.querySelectorAll('.slot');
+allSlots.forEach(slotDiv => {
+    if (slotDiv.textContent.includes(`ID: ${reservation.userId}`)) {
+        highlightSlot(slotDiv);
+        slotDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+});
+
 
 
     } catch (error) {
@@ -268,6 +271,7 @@ async function findAndHighlightReservation(userID) {
         alert("Something went wrong while finding the reservation.");
     }
 }
+
 
 document.addEventListener('DOMContentLoaded', () => {
     const spaceDropdown = document.getElementById('spaces');
