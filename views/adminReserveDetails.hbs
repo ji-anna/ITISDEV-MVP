@@ -61,6 +61,38 @@
     document.getElementById('backButton').addEventListener('click', function() {
         window.history.back();
     });
+    
+    document.addEventListener('DOMContentLoaded', () => {
+    const reservationForm = document.getElementById('reservation-form');
+
+    reservationForm.addEventListener('submit', async (e) => {
+        e.preventDefault(); // ❗ Stop default form submission
+
+        const formData = new FormData(reservationForm);
+        const formObject = Object.fromEntries(formData.entries());
+
+        try {
+            const response = await fetch('/submit-reservation', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formObject)
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                alert(data.message || 'Reservation failed.');
+            } else {
+                alert('Reservation successful!');
+                window.location.href = '/adminReserve'; // ✅ Redirect after success
+            }
+        } catch (err) {
+            window.location.href = '/adminReserve';
+        }
+    });
+});
 </script>
 
 </body>

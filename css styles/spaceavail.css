@@ -50,6 +50,7 @@ h1 {
 .space-reserved {
     background-color: #2d7814;
     padding: 10px;
+    width: 100px; 
     text-align: center;
     border: solid 2px #2d7814;
     border-radius: 5px;
