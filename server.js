@@ -556,6 +556,10 @@ app.post('/submit-reservation', async (req, res) => {
             return res.status(400).send('User ID is required.');
         }
 
+        const existingReservation = await Reservation.findOne({ userId });
+        if (existingReservation) {
+            return res.status(400).json({ message: 'You already have a reservation.' });
+        }
 
         const user = await User.findOne({ userId });
         if (!user || user.ticketCount < 1) {
