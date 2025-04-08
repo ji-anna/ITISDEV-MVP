@@ -7,7 +7,7 @@ const reservationsSchema = new mongoose.Schema({
     slotId: { type: Number, required: true },
     anonymous: { type: Boolean, default: false },
     userId: { type: String, required: true },
-    status: { type: String, enum: ['active', 'completed', 'overnight'], default: 'active' }
+    status: { type: String, enum: ['active', 'completed', 'overtime'], default: 'active' }
 });
 
 const Reservations = mongoose.model('reservationsCollection', reservationsSchema);
