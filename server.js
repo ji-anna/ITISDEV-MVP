@@ -618,10 +618,9 @@ app.post('/submit-reservation', async (req, res) => {
         let query = {};
 
        
-        if (req.query.space && req.query.date) {
+        if (req.query.space) {
             query = {
                 space: req.query.space,
-                date: req.query.date
             };
         } else {
             query = { userId: req.session.user.userId };
@@ -1065,7 +1064,7 @@ async function initDB() {
                 date: new Date('2025-04-06'),
                 time: '09:30',
                 slotId: '4',
-                anonymous: true,
+                anonymous: false,
                 userId: '12279391',
                 status: 'active'
             }

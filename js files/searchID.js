@@ -99,11 +99,16 @@ async function loadAvailability(forcedSpace = null) {
     availabilityDiv.classList.add('space-availability');
 
     // Fetch reservations and filter out completed ones
-    const response = await fetch(`/api/reservations?space=${space}&date=${selectedDate}`);
+    const response = await fetch(`/api/reservations?space=${space}`);
     const reservations = await response.json();
 
     // Only keep active reservations
-    const activeReservations = reservations.filter(reservation => reservation.status !== 'completed');
+    const activeReservations = reservations.filter(reservation => {
+        const resDate = new Date(reservation.date).toISOString().split('T')[0];
+        return reservation.status === 'overtime' ||
+               (reservation.status === 'active' && resDate === selectedDate);
+    });
+    
 
     const loggedInUser = JSON.parse(sessionStorage.getItem('loggedInUser'));
 
@@ -114,13 +119,19 @@ async function loadAvailability(forcedSpace = null) {
         const reservation = activeReservations.find(res => res.slotId === slot.id);
 
         if (reservation) {
-            slotDiv.classList.add('space-reserved');
+            if (reservation.status === 'overtime') {
+                slotDiv.classList.add('space-overtime');
+            } else {
+                slotDiv.classList.add('space-reserved');
+            }
+
 
             if (loggedInUser.role === 'technician') {
                 const infoDiv = document.createElement('div');
                 infoDiv.textContent = reservation.anonymous
-                    ? 'Reserved (Anonymous)'
-                    : `ID: ${reservation.userId}`;
+                ? `Reserved (Anonymous)  ${reservation.status}`
+                : `ID: ${reservation.userId} ${reservation.status}`;
+
                 slotDiv.appendChild(infoDiv);
 
                 // Allow technician to click and visually "remove" reservation
@@ -143,7 +154,7 @@ async function loadAvailability(forcedSpace = null) {
                         });
 
                         // Send request to backend to mark reservation as completed
-                        markReservationCompleted(reservation.userId, reservation.slotId, selectedDate, reservation.time);
+                        markReservationCompleted(reservation.userId, reservation.slotId, reservation.date, reservation.time);
 
                     }
                 });

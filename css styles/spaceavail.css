@@ -72,6 +72,15 @@ h1 {
     border-radius: 10px;
   }  
 
+.space-overtime {
+    background-color: #ef9d39;
+    padding: 10px;
+    width: 100px; 
+    text-align: center;
+    border: solid 2px #2d7814;
+    border-radius: 5px;
+}
+
   .selected-slot {
     border: 2px solid #2d7814;
     background-color: #ddd253;

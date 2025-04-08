@@ -36,11 +36,17 @@ async function loadAvailability(forcedSpace = null) {
 
     availabilityDiv.classList.add('space-availability');
 
-    const response = await fetch(`/api/reservations?space=${space}&date=${selectedDate}`);
+    const response = await fetch(`/api/reservations?space=${space}`);
 
     const reservations = await response.json();
 
-    const activeReservations = reservations.filter(reservation => reservation.status !== 'completed');
+    const activeReservations = reservations.filter(reservation => {
+        const resDate = new Date(reservation.date).toISOString().split('T')[0];
+        return reservation.status === 'overtime' ||
+               (reservation.status === 'active' && resDate === selectedDate);
+    });
+    
+    
 
     const loggedInUser = JSON.parse(sessionStorage.getItem('loggedInUser'));
 
@@ -51,17 +57,23 @@ async function loadAvailability(forcedSpace = null) {
         const reservation = activeReservations.find(res => res.slotId === slot.id);
 
         if (reservation) {
-            slotDiv.classList.add('space-reserved');
+            if (reservation.status === 'overtime') {
+                slotDiv.classList.add('space-overtime');
+            } else {
+                slotDiv.classList.add('space-reserved');
+            }
         
             if (loggedInUser.role === 'technician') {
                 const infoDiv = document.createElement('div');
+                let statusText = reservation.status === 'overtime' ? 'Overtime' : 'Reserved';
                 infoDiv.textContent = reservation.anonymous
-                    ? 'Reserved (Anonymous)'
-                    : `ID: ${reservation.userId}`;
+                    ? `${statusText} (Anonymous)`
+                    : `${statusText} ID: ${reservation.userId}`;
                 slotDiv.appendChild(infoDiv);
             } else {
-                slotDiv.textContent = 'Reserved';
+                slotDiv.textContent = reservation.status === 'overtime' ? 'Overtime' : 'Reserved';
             }
+        
         
         } else {
         
@@ -173,9 +185,43 @@ function updateDateTimeDisplay() {
     if (timeInput) timeInput.value = timeStr;
 }
 
+async function updateOverdueReservations() {
+    const today = new Date().toISOString().split('T')[0];
+
+    try {
+        const response = await fetch(`/api/reservations/all`);
+        const reservations = await response.json();
+
+        const overdue = reservations.filter(res => {
+            return res.status === 'active' && res.date < today;
+        });
+
+        for (const res of overdue) {
+            await fetch(`/api/updateReservationStatus`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    reservationId: res._id, // or whatever unique ID your reservation uses
+                    newStatus: 'overtime'
+                }),
+            });
+        }
+
+        if (overdue.length > 0) {
+            console.log(`${overdue.length} reservation(s) marked as overtime.`);
+        }
+
+    } catch (error) {
+        console.error("Error updating overdue reservations:", error);
+    }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     const spaceDropdown = document.getElementById('spaces');
     updateDateTimeDisplay();
+    updateOverdueReservations();
 
     // If dropdown exists but has no value selected, default to "Third Floor"
     const defaultSpace = "Third Floor";
