@@ -471,6 +471,7 @@ app.post('/api/login', async (req, res) => {
         }
 
         req.session.user = user;
+        req.session.userId = user._id;
         res.status(200).json(user);
     } catch (error) {
         console.error('Error during login:', error);
@@ -1006,6 +1007,9 @@ app.listen(port, async () => {
     console.log(`Server is running at http://localhost:${port}`);
     await initDB();
 });
+
+const ticketRoutes = require('./js files/ticketRoutes'); // adjust path if needed
+app.use('/api', ticketRoutes); // or app.use('/api', ticketRoutes);
 
 
   
