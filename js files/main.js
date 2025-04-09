@@ -1,4 +1,4 @@
-async function updateOverdueReservations() {
+async function updateOverdueReservations(userId, role) {
     const today = new Date().toISOString().split('T')[0];
 
     try {
@@ -6,7 +6,11 @@ async function updateOverdueReservations() {
         const reservations = await response.json();
 
         const overdue = reservations.filter(res => {
-            return res.status === 'active' && res.date < today;
+            const isOverdue = res.status === 'active' && res.date < today;
+            const isTechnician = role === 'technician';
+            const isCurrentUser = res.userId === userId;
+
+            return isOverdue && (isTechnician || isCurrentUser);
         });
 
         for (const res of overdue) {
@@ -30,6 +34,7 @@ async function updateOverdueReservations() {
         console.error("Error updating overdue reservations:", error);
     }
 }
+
 
 
 
@@ -69,7 +74,8 @@ document.addEventListener('DOMContentLoaded', () => {
     
                     try {
                         // ✅ Update overdue reservations before checking unpaid overtime
-                        await updateOverdueReservations();
+                        await updateOverdueReservations(user._id, user.role);
+
     
                         // ✅ Check for unpaid overtime
                         const res = await fetch('/api/reservations');
