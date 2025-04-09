@@ -466,13 +466,12 @@ app.get('/admindeletereserve', async (req, res) => {
 });
 
 
-const Reservations = require('./models/Reservations'); // adjust path if needed
+const Reservations = require('./models/Reservations');
 
 app.get('/adminSearchUser', async (req, res) => {
     try {
         const users = await User.find().lean();
 
-        // Loop through users and determine their status
         const usersWithStatus = await Promise.all(users.map(async user => {
             const hasOvertime = await Reservations.exists({
                 userId: user.userId,
@@ -937,17 +936,17 @@ app.get('/adminViewUser/:id', async (req, res) => {
 app.post('/api/addCar', async (req, res) => {
     try {
       const { userId, plateNumber } = req.body;
-      // 1. Find the user by their userId
+
       const user = await User.findOne({ userId });
       if (!user) {
         return res.status(404).json({ message: 'User not found.' });
       }
   
-      // 2. Push the new plateNumber into the user's carPlates array
+  
       if (!user.carPlate) {
         user.carPlate = [];
       }
-      // Optionally check for duplicates before adding
+
       if (user.carPlate.includes(plateNumber)) {
         return res.status(400).json({ message: 'This plate number already exists.' });
       }
@@ -977,16 +976,16 @@ app.delete('/api/deleteCar', async (req, res) => {
         return res.status(401).json({ success: false, message: 'Not authenticated' });
       }
   
-      // Find user in DB
+  
       const user = await User.findById(userId);
       if (!user) {
         return res.status(404).json({ success: false, message: 'User not found' });
       }
   
-      // Filter out the plate to delete
+
       user.carPlate = user.carPlate.filter(existingPlate => existingPlate !== plate);
   
-      // Save user
+   
       await user.save();
   
       res.json({ success: true });
@@ -1093,7 +1092,7 @@ app.get('/overtimePayment', isAuthenticated, isStudent, (req, res) => {
 });
   
 
-// Mark overtime reservation as paid
+
 app.post('/api/payOvertime', isAuthenticated, async (req, res) => {
     try {
       const { reservationId } = req.body;
@@ -1103,12 +1102,12 @@ app.post('/api/payOvertime', isAuthenticated, async (req, res) => {
         return res.status(400).send('Invalid or already paid reservation.');
       }
   
-      // Mark as paid
+   
       reservation.status = 'paid';
       reservation.paidAt = new Date();
       await reservation.save();
   
-      // Save receipt to session
+ 
       req.session.overtimePayment = {
         userName: req.session.user.name,
         userId: req.session.user.userId,

@@ -203,7 +203,7 @@ async function updateOverdueReservations() {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    reservationId: res._id, // or whatever unique ID your reservation uses
+                    reservationId: res._id,
                     newStatus: 'overtime'
                 }),
             });

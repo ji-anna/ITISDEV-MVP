@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             profileImage.src = '/assets/default.jpg';
         };
 
-        // Fetch reservations
+
         try {
             const response = await fetch('/api/reservations');
             if (!response.ok) {
@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             const reservations = await response.json();
             displayReservations(reservations);
 
-            // Check for unpaid overtime
+
             const hasUnpaidOvertime = reservations.some(res => res.status === 'overtime');
             if (hasUnpaidOvertime) {
                 alert('You have unpaid overtime charges. Please settle them before making a new reservation.');
