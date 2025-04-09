@@ -32,8 +32,10 @@
   <div class="ticket-history">
     <h3>Ticket History</h3>
     <ul class="tabs">
-      <li class="active" onclick="showTab('purchased')">Purchased</li>
-      <li onclick="showTab('used')">Used</li>
+      <li class="active" data-tab="purchased">Purchased</li>
+      <li data-tab="used">Used</li>
+      <li data-tab="overtime">Overtime Charges</li>
+
     </ul>
 
     <div id="purchased" class="tab-content active">
@@ -61,6 +63,40 @@
         {{/each}}
       </table>
     </div>
+
+    <div id="overtime" class="tab-content">
+      <table>
+        <tr>
+          <th>Date</th>
+          <th>Time</th>
+          <th>Slot</th>
+          <th>Space</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+        {{#each overtimeCharges}}
+        <tr>
+          <td>{{this.date}}</td>
+          <td>{{this.time}}</td>
+          <td>Slot {{this.slotId}}</td>
+          <td>{{this.space}}</td>
+          <td>{{this.status}}</td>
+          <td>
+            {{#if (eq this.status "overtime")}}
+            <form action="/api/payOvertime" method="POST">
+              <input type="hidden" name="reservationId" value="{{this._id}}">
+              <button type="submit" class="pay-button">Pay Now</button>
+            </form>
+            {{else}}
+              <span style="color: green;">Paid</span>
+            {{/if}}
+          </td>
+        </tr>
+        {{/each}}
+      </table>
+    </div>
+
+
   </div>
 </div>
 

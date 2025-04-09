@@ -74,6 +74,24 @@ body {
     border-bottom: 1px solid #ccc;
   }
 
+  .pay-button {
+    background-color: #d34420;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+  .pay-button:hover {
+    background-color: #bb4130;
+  }
+  .paid-label {
+    color: green;
+    font-weight: bold;
+  }
+  
+
   /* FOR NAVIGATION BAR */
 header {
     background-color:#045f01;; 

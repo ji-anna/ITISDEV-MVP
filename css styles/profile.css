@@ -239,6 +239,21 @@ button:hover{
     cursor: pointer;
 }
 
+.pay-button {
+    background-color: #009688;
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .pay-button:hover {
+    background-color: #00796b;
+  }
+  
+
 /* FOR NAVIGATION BAR */
 header {
     background-color:#045f01;; 

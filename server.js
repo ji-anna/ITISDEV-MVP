@@ -16,14 +16,17 @@ mongoose.connect('mongodb://localhost/ParkingResDB');
 
 
 const handlebars = hbs.create({
+    extname: 'hbs',
+    defaultLayout: false,
     helpers: {
-        eq: (a, b) => a === b
+        eq: (a, b) => a === b,
+        multiply: (a, b) => a * b
     }
 });
 
 
-app.engine('handlebars', handlebars.engine);
-app.set('view engine', 'handlebars');
+app.engine('hbs', handlebars.engine);
+app.set('view engine', 'hbs');
 
 app.use(
     session({
@@ -43,9 +46,9 @@ const isAuthenticated = (req, res, next) => {
     }
 };
 
-app.engine('hbs', hbs.engine({ extname: 'hbs', defaultLayout: false }));
+
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'hbs');
+
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -106,13 +109,19 @@ app.get('/ticketDashboard', isAuthenticated, isStudent, async (req, res) => {
       const user = await User.findById(req.session.user._id).lean();
       const purchases = await Purchase.find({ userId: user.userId }).lean();
       const usedTickets = await TicketUsage.find({ userId: user.userId }).lean();
+      const overtimeCharges = await Reservation.find({
+        userId: user.userId,
+        $or: [{ status: 'overtime' }, { status: 'paid' }]
+      }).lean();
   
       res.render('ticketDashboard', {
         user,
         purchases,
         usedTickets,
+        overtimeCharges,
         helpers: {
-          multiply: (a, b) => a * b
+          multiply: (a, b) => a * b,
+          eq: (a, b) => a === b
         }
       });
     } catch (err) {
@@ -120,6 +129,8 @@ app.get('/ticketDashboard', isAuthenticated, isStudent, async (req, res) => {
       res.status(500).send("Internal Server Error");
     }
   });
+  
+  
   
 // Ticket Checkout
 app.get('/ticketCheckout', isAuthenticated, isStudent, (req, res) => {
@@ -1006,7 +1017,27 @@ app.get('/api/user-status/:userName', async (req, res) => {
     }
 });
 
-
+// Mark overtime reservation as paid
+app.post('/api/payOvertime', isAuthenticated, async (req, res) => {
+    try {
+      const { reservationId } = req.body;
+      const reservation = await Reservation.findById(reservationId);
+  
+      if (!reservation || reservation.status !== 'overtime') {
+        return res.status(400).send('Invalid or already paid.');
+      }
+  
+      reservation.status = 'paid';
+      await reservation.save();
+  
+      res.redirect('/ticketDashboard');
+    } catch (err) {
+      console.error('Overtime payment failed:', err);
+      res.status(500).send('Internal Server Error');
+    }
+  });
+  
+  
 
 async function initDB() {
     try {
