@@ -108,7 +108,6 @@
                 <th>Slot ID</th>
                 <th>Anonymous</th>
                 <th>Price</th>
-                <th>Status</th>
             </tr>
         </thead>
         <tbody>
@@ -121,12 +120,6 @@
                     <td>{{this.slotId}}</td>
                     <td>{{#if this.anonymous}}Yes{{else}}No{{/if}}</td>
                     <td>₱1,200</td>
-                    <td>
-                        <form action="/api/payOvertime" method="POST">
-                        <input type="hidden" name="reservationId" value="{{this._id}}">
-                        <button type="submit" class="pay-button">Pay Now</button>
-                        </form>
-                    </td>
                 </tr>
                 {{/if}}
             {{/each}}
