@@ -332,6 +332,7 @@ app.get('/profilepage', async (req, res) => {
             role: user.role,
             department: user.department,
             description: user.profileDesc,
+            carPlate: user.carPlate,
             reservations: reservations.map(reservation => ({
                 space: reservation.parkingFloor,
                 date: reservation.resStartSched.toDateString(),
@@ -796,7 +797,8 @@ app.get('/user/:id', async (req, res) => {
                 role: user.role,
                 department: user.department,
                 description: user.profileDesc,
-                profileImg: user.profileImg
+                profileImg: user.profileImg,
+                carPlate: user.carPlate
             });
         } else {
             res.status(404).json({ message: 'User not found' });
@@ -823,6 +825,7 @@ app.get('/userprofile/:username', async (req, res) => {
                 role: user.role,
                 department: user.department,
                 description: user.profileDesc,
+                carPlate: user.carPlate,
                 profileImg: user.profileImg,
                 reservations: reservations.map(reservation => ({
                     _id: reservation._id,
@@ -859,6 +862,7 @@ app.get('/adminViewUser/:id', async (req, res) => {
                 role: user.role,
                 department: user.department,
                 description: user.profileDesc,
+                carPlate: user.carPlate,
                 profileImg: user.profileImg,
                 reservations: reservations.map(reservation => ({
                     _id: reservation._id,
