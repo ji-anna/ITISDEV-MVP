@@ -1017,6 +1017,14 @@ app.get('/api/user-status/:userName', async (req, res) => {
     }
 });
 
+app.get('/overtimePayment', isAuthenticated, isStudent, (req, res) => {
+    const receipt = req.session.overtimePayment;
+    if (!receipt) return res.redirect('/ticketDashboard');
+  
+    res.render('overtimePayment', receipt);
+});
+  
+
 // Mark overtime reservation as paid
 app.post('/api/payOvertime', isAuthenticated, async (req, res) => {
     try {
@@ -1024,18 +1032,33 @@ app.post('/api/payOvertime', isAuthenticated, async (req, res) => {
       const reservation = await Reservation.findById(reservationId);
   
       if (!reservation || reservation.status !== 'overtime') {
-        return res.status(400).send('Invalid or already paid.');
+        return res.status(400).send('Invalid or already paid reservation.');
       }
   
+      // Mark as paid
       reservation.status = 'paid';
+      reservation.paidAt = new Date();
       await reservation.save();
   
-      res.redirect('/ticketDashboard');
-    } catch (err) {
-      console.error('Overtime payment failed:', err);
-      res.status(500).send('Internal Server Error');
+      // Save receipt to session
+      req.session.overtimePayment = {
+        userName: req.session.user.name,
+        userId: req.session.user.userId,
+        floor: reservation.space,
+        date: reservation.date.toDateString(),
+        time: reservation.time,
+        slotId: reservation.slotId,
+        paidAt: new Date().toLocaleString(),
+        price: 1200
+      };
+  
+      res.redirect('/overtimePayment');
+    } catch (error) {
+      console.error('Error processing overtime payment:', error);
+      res.status(500).send('Error processing payment.');
     }
-  });
+});
+  
   
   
 
