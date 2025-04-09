@@ -1,3 +1,38 @@
+async function updateOverdueReservations() {
+    const today = new Date().toISOString().split('T')[0];
+
+    try {
+        const response = await fetch(`/api/reservations/all`);
+        const reservations = await response.json();
+
+        const overdue = reservations.filter(res => {
+            return res.status === 'active' && res.date < today;
+        });
+
+        for (const res of overdue) {
+            await fetch(`/api/updateReservationStatus`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    reservationId: res._id,
+                    newStatus: 'overtime'
+                }),
+            });
+        }
+
+        if (overdue.length > 0) {
+            console.log(`${overdue.length} reservation(s) marked as overtime.`);
+        }
+
+    } catch (error) {
+        console.error("Error updating overdue reservations:", error);
+    }
+}
+
+
+
 document.addEventListener('DOMContentLoaded', () => {
     const loginForm = document.getElementById('loginForm');
     const logoutButton = document.getElementById('logoutButton');
@@ -33,7 +68,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
     
                     try {
-                        // Check for unpaid overtime before redirecting
+                        // ✅ Update overdue reservations before checking unpaid overtime
+                        await updateOverdueReservations();
+    
+                        // ✅ Check for unpaid overtime
                         const res = await fetch('/api/reservations');
                         if (!res.ok) throw new Error('Failed to fetch reservations');
                         const reservations = await res.json();
@@ -142,6 +180,14 @@ document.addEventListener('DOMContentLoaded', () => {
         const noticeDiv = document.getElementById('overtimeWarning');
         if (noticeDiv) {
             noticeDiv.style.display = 'block';
+        }
+
+        const viewSlotsBtn = document.getElementById('viewFreeSlotsBtn');
+        if (viewSlotsBtn) {
+            viewSlotsBtn.disabled = true;
+            viewSlotsBtn.title = "You have unpaid overtime charges. Please settle them first.";
+            viewSlotsBtn.style.opacity = 0.5; // visually indicate it's disabled
+            viewSlotsBtn.style.cursor = 'not-allowed';
         }
     }
 });
