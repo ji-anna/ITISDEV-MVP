@@ -2,7 +2,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     const loggedInUser = JSON.parse(sessionStorage.getItem('loggedInUser'));
     const cancelButton = document.getElementById('cancelButton');
 
-
     if (loggedInUser) {
         document.getElementById('profileName').textContent = loggedInUser.name;
         document.getElementById('userId').textContent = loggedInUser.userId;
@@ -20,7 +19,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             profileImage.src = '/assets/default.jpg';
         };
 
-
+        // Fetch reservations
         try {
             const response = await fetch('/api/reservations');
             if (!response.ok) {
@@ -28,13 +27,13 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
             const reservations = await response.json();
             displayReservations(reservations);
-            // Check for unpaid overtime and disable reservation access
+
+            // Check for unpaid overtime
             const hasUnpaidOvertime = reservations.some(res => res.status === 'overtime');
             if (hasUnpaidOvertime) {
                 alert('You have unpaid overtime charges. Please settle them before making a new reservation.');
                 sessionStorage.setItem('accountDisabled', 'true');
             }
-
         } catch (error) {
             console.error('Error fetching reservations:', error);
         }
@@ -75,6 +74,52 @@ function displayReservations(reservations) {
     });
 }
 
+
+function showAddCarForm() {
+  document.getElementById('addCarForm').style.display = 'block';
+}
+
+async function confirmAddCar() {
+  const newPlateNumber = document.getElementById('newPlateNumber').value.trim();
+  if (!newPlateNumber) {
+    alert('Please enter a valid plate number.');
+    return;
+  }
+
+  const loggedInUser = JSON.parse(sessionStorage.getItem('loggedInUser'));
+  if (!loggedInUser) {
+    alert('No logged-in user found.');
+    return;
+  }
+
+  try {
+    const response = await fetch('/api/addCar', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        userId: loggedInUser.userId, 
+        plateNumber: newPlateNumber
+      })
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to add new car plate. Server responded with an error.');
+    }
+
+    const data = await response.json();
+    alert(data.message);  
+
+    document.getElementById('plateNumber').textContent = newPlateNumber;
+    loggedInUser.carPlate = newPlateNumber;
+    sessionStorage.setItem('loggedInUser', JSON.stringify(loggedInUser));
+
+    document.getElementById('newPlateNumber').value = '';
+    document.getElementById('addCarForm').style.display = 'none';
+  } catch (error) {
+    console.error(error);
+    alert('Failed to save the plate number. Please try again.');
+  }
+}
 
 cancelButton.addEventListener('click', async () => {
     const loggedInUser = JSON.parse(sessionStorage.getItem('loggedInUser'));

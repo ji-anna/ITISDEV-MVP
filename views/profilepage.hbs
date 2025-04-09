@@ -55,10 +55,18 @@
                 <span id="profileDescription">{{user.description}}</span>
             </div>
             <div>
-                <label>Car Plate Number: </label>
-                <span id="plateNumber">{{user.plateNumber}}</span>
+            <label>Car Plate Number: </label>
+            <span id="plateNumber">{{user.plateNumber}}</span>
             </div>
-            <button class="small-button" onclick="addCar()">Add Car</button>
+            <button class="small-button" onclick="showAddCarForm()">Add Car</button>
+
+            <!-- Hidden form for adding a new car plate -->
+            <div id="addCarForm" style="display: none; margin-top: 10px;">
+            <label for="newPlateNumber">New Plate Number:</label>
+            <input type="text" id="newPlateNumber" placeholder="Enter plate number" />
+            <button onclick="confirmAddCar()">Confirm</button>
+            </div>
+            
             <div class="reservations-section">
     <h1>My Reservations</h1>
 

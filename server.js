@@ -884,6 +884,29 @@ app.get('/adminViewUser/:id', async (req, res) => {
     }
 });
 
+
+app.post('/api/addCar', async (req, res) => {
+    try {
+      const { userId, plateNumber } = req.body;
+  
+      // Find the user by their userId
+      const user = await User.findOne({ userId: userId });
+      if (!user) {
+        return res.status(404).json({ message: 'User not found.' });
+      }
+  
+      // Update user's carPlate and save
+      user.carPlate = plateNumber;
+      await user.save();
+  
+      return res.json({ message: 'Plate number updated successfully!' });
+    } catch (error) {
+      console.error('Error updating car plate:', error);
+      res.status(500).json({ message: 'Internal server error.' });
+    }
+  });
+  
+  
 // DELETE ANOTHER USER'S RESERVATION (FOR ADMIN)
 app.delete('/api/deleteSearchReservation', isAuthenticated, async (req, res) => {
     const { _id } = req.body;
