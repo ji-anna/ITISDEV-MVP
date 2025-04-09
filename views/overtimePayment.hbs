@@ -19,7 +19,7 @@
   </div>
 
   <div class="button-group">
-    <button onclick="window.location.href='/ticketDashboard'">Back</button>
+    <button onclick="window.location.href = '/mainMenu?paidOvertime=true'">Back</button>
     <button id="downloadReceipt">Download Receipt</button>
   </div>
 
@@ -33,6 +33,11 @@
         link.click();
       });
     });
+  </script>
+  <script>
+            setTimeout(() => {
+        window.location.href = '/mainMenu?paidOvertime=true';
+    }, 10000);
   </script>
 </body>
 </html>

@@ -41,7 +41,15 @@
         </center>
     </div>
 
-    <script src="js files/main.js"></script>
+    <script src="js files/main.js">
+
+        {{#if hasUnpaidOvertime}}
+            sessionStorage.setItem('hasUnpaidOvertime', 'true');
+        {{else}}
+            sessionStorage.removeItem('hasUnpaidOvertime');
+        {{/if}}
+
+    </script>
 </body>
 
 </html>

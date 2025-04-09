@@ -177,6 +177,15 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 document.addEventListener('DOMContentLoaded', () => {
+    const urlParams = new URLSearchParams(window.location.search);
+
+
+    if (urlParams.get('paidOvertime') === 'true') {
+        sessionStorage.removeItem('hasUnpaidOvertime');
+
+        window.history.replaceState({}, document.title, "/mainMenu");
+    }
+
     const hasUnpaidOvertime = sessionStorage.getItem('hasUnpaidOvertime');
 
     if (hasUnpaidOvertime === 'true') {
@@ -194,3 +203,4 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 });
+
