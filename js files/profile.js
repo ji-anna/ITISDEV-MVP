@@ -116,16 +116,13 @@ async function confirmAddCar() {
     }
 
     const data = await response.json();
-    alert(data.message); // e.g. 'New plate number added successfully!'
+    alert(data.message); 
 
-    // Update the user in sessionStorage with the new array of plates
     loggedInUser.carPlate = data.carPlate; 
     sessionStorage.setItem('loggedInUser', JSON.stringify(loggedInUser));
 
-    // Update the DOM display
     document.getElementById('plateNumber').textContent = data.carPlate.join(', ');
 
-    // Clear and hide form
     document.getElementById('newPlateNumber').value = '';
     document.getElementById('addCarForm').style.display = 'none';
 
@@ -133,6 +130,42 @@ async function confirmAddCar() {
     console.error(error);
     alert(error.message);
   }
+}
+
+
+function showDeleteCarForm() {
+  document.getElementById("addCarForm").style.display = "none";
+  document.getElementById("deleteCarForm").style.display = "block";
+}
+
+function confirmDeleteCar() {
+  const plateToDelete = document.getElementById("deletePlateNumber").value.trim();
+  
+  if (!plateToDelete) {
+    alert("Please enter a plate number to delete.");
+    return;
+  }
+
+  fetch('/api/deleteCar', {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ plate: plateToDelete })
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.success) {
+      alert('Car plate successfully deleted!');
+      location.reload();
+    } else {
+      alert('Failed to delete car: ' + data.message);
+    }
+  })
+  .catch(error => {
+    console.error('Error deleting car:', error);
+    alert('An error occurred while deleting the car plate.');
+  });
 }
 
 

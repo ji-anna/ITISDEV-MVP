@@ -20,10 +20,21 @@ const handlebars = hbs.create({
     defaultLayout: false,
     helpers: {
         eq: (a, b) => a === b,
-        multiply: (a, b) => a * b
+        multiply: (a, b) => a * b,
+        formatDate: function (dateString) {
+            if (!dateString) return '';
+            const dateObj = new Date(dateString);
+            return dateObj.toLocaleString('en-US', {
+              month: 'short',
+              day: 'numeric',
+              year: 'numeric',
+              hour: 'numeric',
+              minute: '2-digit',
+              hour12: true
+            });
+          }
     }
 });
-
 
 app.engine('hbs', handlebars.engine);
 app.set('view engine', 'hbs');
@@ -918,7 +929,6 @@ app.get('/adminViewUser/:id', async (req, res) => {
 });
 
 
-// server.js
 app.post('/api/addCar', async (req, res) => {
     try {
       const { userId, plateNumber } = req.body;
@@ -947,6 +957,37 @@ app.post('/api/addCar', async (req, res) => {
     } catch (error) {
       console.error('Error updating car plate:', error);
       res.status(500).json({ message: 'Internal server error.' });
+    }
+  });
+  
+app.delete('/api/deleteCar', async (req, res) => {
+    try {
+      const { plate } = req.body;
+      if (!plate) {
+        return res.status(400).json({ success: false, message: 'Missing plate number' });
+      }
+  
+      const userId = req.session.userId; 
+      if (!userId) {
+        return res.status(401).json({ success: false, message: 'Not authenticated' });
+      }
+  
+      // Find user in DB
+      const user = await User.findById(userId);
+      if (!user) {
+        return res.status(404).json({ success: false, message: 'User not found' });
+      }
+  
+      // Filter out the plate to delete
+      user.carPlate = user.carPlate.filter(existingPlate => existingPlate !== plate);
+  
+      // Save user
+      await user.save();
+  
+      res.json({ success: true });
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ success: false, message: 'Server error' });
     }
   });
   

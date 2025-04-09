@@ -60,11 +60,18 @@
             <span id="plateNumber">{{#if carPlate}}{{carPlate}}{{else}}(No plates){{/if}}</span>
             </div>
             <button class="small-button" onclick="showAddCarForm()">Add Car</button>
+            <button class="small-button" style="background-color: rgb(255, 255, 255); color: rgb(255, 0, 0);" onclick="showDeleteCarForm()">Delete Car</button>
 
             <div id="addCarForm" style="display: none; margin-top: 10px;">
             <label for="newPlateNumber">New Plate Number:</label>
             <input type="text" id="newPlateNumber" placeholder="Enter plate number" />
             <button onclick="confirmAddCar()">Confirm</button>
+            </div>
+
+            <div id="deleteCarForm" style="display: none; margin-top: 10px;">
+            <label for="deletePlateNumber">Plate to Delete:</label>
+            <input type="text" id="deletePlateNumber" placeholder="Enter plate number" />
+            <button onclick="confirmDeleteCar()">Confirm Delete</button>
             </div>
 
             <div class="reservations-section">

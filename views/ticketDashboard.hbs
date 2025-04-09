@@ -39,24 +39,29 @@
     </ul>
 
     <div id="purchased" class="tab-content active">
-      <table>
-        <tr><th>Date</th><th>Quantity</th><th>Total</th></tr>
-        {{#each purchases}}
-        <tr>
-          <td>{{this.date}}</td>
-          <td>{{this.quantity}}</td>
-          <td>₱{{multiply this.quantity 600}}</td>
-        </tr>
-        {{/each}}
-      </table>
-    </div>
+  <table>
+    <tr>
+      <th>Date</th>
+      <th>Quantity</th>
+      <th>Total</th>
+    </tr>
+    {{#each purchases}}
+      <tr>
+        <td>{{formatDate this.date}}</td>
+        <td>{{this.quantity}}</td>
+        <td>₱{{multiply this.quantity 600}}</td>
+      </tr>
+    {{/each}}
+  </table>
+</div>
+
 
     <div id="used" class="tab-content">
       <table>
         <tr><th>Date</th><th>Slot</th><th>Space</th></tr>
         {{#each usedTickets}}
         <tr>
-          <td>{{this.date}}</td>
+          <td>{{formatDate this.date}}</td>
           <td>Slot {{this.slotId}}</td>
           <td>{{this.space}}</td>
         </tr>
@@ -76,7 +81,7 @@
         </tr>
         {{#each overtimeCharges}}
         <tr>
-          <td>{{this.date}}</td>
+          <td>{{formatDate this.date}}</td>
           <td>{{this.time}}</td>
           <td>Slot {{this.slotId}}</td>
           <td>{{this.space}}</td>
