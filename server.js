@@ -613,6 +613,11 @@ app.post('/submit-reservation', async (req, res) => {
             return res.status(400).json({ message: 'You already have a reservation.' });
         }
 
+        const overtimeReservation = await Reservation.findOne({ userId, status: 'overtime' });
+        if (overtimeReservation) {
+            return res.status(400).json({ message: 'The account reserving is suspended.' });
+        }
+
         const user = await User.findOne({ userId });
         if (!user || user.ticketCount < 1) {
             return res.status(400).json({ message: 'Insufficient tickets.' });
