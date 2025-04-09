@@ -299,3 +299,10 @@ header {
     background-color:#2d7814;
     border: 2px solid #2d7814;
 }
+
+.small-button {
+    font-size: 0.85rem;
+    padding: 5px 10px;
+    margin-top: 5px;
+    cursor: pointer;
+}
