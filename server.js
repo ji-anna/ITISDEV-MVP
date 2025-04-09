@@ -450,15 +450,32 @@ app.get('/admindeletereserve', async (req, res) => {
 });
 
 
+const Reservations = require('./models/Reservations'); // adjust path if needed
+
 app.get('/adminSearchUser', async (req, res) => {
     try {
         const users = await User.find().lean();
-        res.render('adminSearchUser', { users });
+
+        // Loop through users and determine their status
+        const usersWithStatus = await Promise.all(users.map(async user => {
+            const hasOvertime = await Reservations.exists({
+                userId: user.userId,
+                status: 'overtime'
+            });
+
+            return {
+                ...user,
+                status: hasOvertime ? 'suspended' : 'active'
+            };
+        }));
+
+        res.render('adminSearchUser', { users: usersWithStatus });
     } catch (error) {
         console.error('Error fetching users:', error);
         res.status(500).json({ message: 'Internal Server Error' });
     }
 });
+
 
 app.get('/suspendedAccounts', async (req, res) => {
     try {

@@ -35,19 +35,25 @@
                     <th>Email</th>
                     <th>Role</th>
                     <th>Department</th>
+                    <th>Status</th>
                 </tr>
             </thead>
             <tbody id="user-table-body">
-                {{#users}}
-                <tr>
-                    <td>{{userId}}</td>
-                    <td>{{name}}</td>
-                    <td>{{email}}</td>
-                    <td>{{role}}</td>
-                    <td>{{department}}</td>
-                </tr>
-                {{/users}}
-            </tbody>
+    {{#users}}
+    <tr>
+        <td>{{userId}}</td>
+        <td>{{name}}</td>
+        <td>{{email}}</td>
+        <td>{{role}}</td>
+        <td>{{department}}</td>
+        <td>
+            <span style="color: {{#if (eq status 'active')}}green{{else}}red{{/if}};">
+                {{status}}
+            </span>
+        </td>
+    </tr>
+    {{/users}}
+</tbody>
         </table>
 
         <div class="button-grp">
