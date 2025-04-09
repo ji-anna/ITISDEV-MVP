@@ -14,7 +14,14 @@
     </div>
     <ul class="nav-links">
       <li><a href="/mainMenu">Home</a></li>
-      <li><a href="/space-availability">View Slots</a></li>
+
+      {{!-- Check if there are any overtime charges with status "overtime" --}}
+      {{#if hasUnpaidOvertime}}
+        <li><a href="#" style="pointer-events: none; opacity: 0.5; cursor: not-allowed;" title="You have unpaid overtime.">View Slots</a></li>
+      {{else}}
+        <li><a href="/space-availability">View Slots</a></li>
+      {{/if}}
+
       <li><a href="/ticketDashboard">Ticket Dashboard</a></li>
       <li><a href="/profilepage" class="active">Profile</a></li>
       <li><a href="/" id="logoutButton">Logout</a></li>
@@ -35,26 +42,20 @@
       <li class="active" data-tab="purchased">Purchased</li>
       <li data-tab="used">Used</li>
       <li data-tab="overtime">Overtime Charges</li>
-
     </ul>
 
     <div id="purchased" class="tab-content active">
-  <table>
-    <tr>
-      <th>Date</th>
-      <th>Quantity</th>
-      <th>Total</th>
-    </tr>
-    {{#each purchases}}
-      <tr>
-        <td>{{formatDate this.date}}</td>
-        <td>{{this.quantity}}</td>
-        <td>₱{{multiply this.quantity 600}}</td>
-      </tr>
-    {{/each}}
-  </table>
-</div>
-
+      <table>
+        <tr><th>Date</th><th>Quantity</th><th>Total</th></tr>
+        {{#each purchases}}
+          <tr>
+            <td>{{formatDate this.date}}</td>
+            <td>{{this.quantity}}</td>
+            <td>₱{{multiply this.quantity 600}}</td>
+          </tr>
+        {{/each}}
+      </table>
+    </div>
 
     <div id="used" class="tab-content">
       <table>
@@ -100,8 +101,6 @@
         {{/each}}
       </table>
     </div>
-
-
   </div>
 </div>
 

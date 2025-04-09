@@ -125,11 +125,15 @@ app.get('/ticketDashboard', isAuthenticated, isStudent, async (req, res) => {
         $or: [{ status: 'overtime' }, { status: 'paid' }]
       }).lean();
   
+      // Check if there is at least one unpaid overtime
+      const hasUnpaidOvertime = overtimeCharges.some(charge => charge.status === 'overtime');
+  
       res.render('ticketDashboard', {
         user,
         purchases,
         usedTickets,
         overtimeCharges,
+        hasUnpaidOvertime, // pass this to the template
         helpers: {
           multiply: (a, b) => a * b,
           eq: (a, b) => a === b
@@ -140,6 +144,7 @@ app.get('/ticketDashboard', isAuthenticated, isStudent, async (req, res) => {
       res.status(500).send("Internal Server Error");
     }
   });
+  
   
   
   
