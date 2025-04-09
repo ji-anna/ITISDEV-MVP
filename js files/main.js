@@ -43,7 +43,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const logoutButton = document.getElementById('logoutButton');
     const registerForm = document.getElementById('registerForm');
 
-    // LOGIN
     if (loginForm) {
         loginForm.addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -73,11 +72,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
     
                     try {
-                        // ✅ Update overdue reservations before checking unpaid overtime
                         await updateOverdueReservations(user._id, user.role);
 
     
-                        // ✅ Check for unpaid overtime
                         const res = await fetch('/api/reservations');
                         if (!res.ok) throw new Error('Failed to fetch reservations');
                         const reservations = await res.json();
@@ -86,7 +83,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         sessionStorage.setItem('hasUnpaidOvertime', hasUnpaidOvertime ? 'true' : 'false');
                     } catch (err) {
                         console.error('Reservation check error:', err);
-                        // Fallback: assume no unpaid overtime
+
                         sessionStorage.setItem('hasUnpaidOvertime', 'false');
                     }
     
@@ -192,7 +189,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (viewSlotsBtn) {
             viewSlotsBtn.disabled = true;
             viewSlotsBtn.title = "You have unpaid overtime charges. Please settle them first.";
-            viewSlotsBtn.style.opacity = 0.5; // visually indicate it's disabled
+            viewSlotsBtn.style.opacity = 0.5;
             viewSlotsBtn.style.cursor = 'not-allowed';
         }
     }

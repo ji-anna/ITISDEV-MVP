@@ -67,7 +67,7 @@
     const reservationForm = document.getElementById('reservation-form');
 
     reservationForm.addEventListener('submit', async (e) => {
-        e.preventDefault(); // ❗ Stop default form submission
+        e.preventDefault(); 
 
         const formData = new FormData(reservationForm);
         const formObject = Object.fromEntries(formData.entries());

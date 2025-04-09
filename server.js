@@ -125,7 +125,6 @@ app.get('/ticketDashboard', isAuthenticated, isStudent, async (req, res) => {
         $or: [{ status: 'overtime' }, { status: 'paid' }]
       }).lean();
   
-      // Check if there is at least one unpaid overtime
       const hasUnpaidOvertime = overtimeCharges.some(charge => charge.status === 'overtime');
   
       res.render('ticketDashboard', {
@@ -133,7 +132,7 @@ app.get('/ticketDashboard', isAuthenticated, isStudent, async (req, res) => {
         purchases,
         usedTickets,
         overtimeCharges,
-        hasUnpaidOvertime, // pass this to the template
+        hasUnpaidOvertime, 
         helpers: {
           multiply: (a, b) => a * b,
           eq: (a, b) => a === b
@@ -145,17 +144,12 @@ app.get('/ticketDashboard', isAuthenticated, isStudent, async (req, res) => {
     }
   });
   
-  
-  
-  
-// Ticket Checkout
 app.get('/ticketCheckout', isAuthenticated, isStudent, (req, res) => {
     res.render('ticketCheckout', {
       user: req.session.user
     });
   });
 
-// Confirm Ticket Purchase
 app.post('/api/confirmCheckout', isAuthenticated, isStudent, async (req, res) => {
     try {
       const quantity = parseInt(req.body.quantity) || 1;
@@ -180,14 +174,12 @@ app.post('/api/confirmCheckout', isAuthenticated, isStudent, async (req, res) =>
     }
   });
 
-// Receipt View
 app.get('/receipt', isAuthenticated, isStudent, (req, res) => {
     const data = req.session.lastReceipt;
     if (!data) return res.redirect('/ticketDashboard');
     res.render('receipt', data);
   });
 
-  // Check ticket eligibility
 app.get('/api/checkTicketEligibility', async (req, res) => {
     try {
       const user = await User.findOne({ userId: req.query.userId });
@@ -199,7 +191,6 @@ app.get('/api/checkTicketEligibility', async (req, res) => {
     }
   });
 
-// Buy ticket pad
 app.post('/api/buyTickets', isAuthenticated, async (req, res) => {
     try {
       const user = req.session.user;
