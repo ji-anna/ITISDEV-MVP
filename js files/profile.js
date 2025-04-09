@@ -28,6 +28,13 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
             const reservations = await response.json();
             displayReservations(reservations);
+            // Check for unpaid overtime and disable reservation access
+            const hasUnpaidOvertime = reservations.some(res => res.status === 'overtime');
+            if (hasUnpaidOvertime) {
+                alert('You have unpaid overtime charges. Please settle them before making a new reservation.');
+                sessionStorage.setItem('accountDisabled', 'true');
+            }
+
         } catch (error) {
             console.error('Error fetching reservations:', error);
         }

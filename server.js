@@ -953,6 +953,24 @@ app.post('/api/markReservationCompleted', async (req, res) => {
     }
 });
 
+app.get('/api/user-status/:userName', async (req, res) => {
+    const userName = req.params.userName;
+
+    try {
+        const userReservations = await Reservation.find({
+            userName,
+            status: 'overtime'
+        });
+
+        const accountDisabled = userReservations.length > 0;
+
+        res.json({ accountDisabled });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Failed to check user status' });
+    }
+});
+
 
 
 async function initDB() {

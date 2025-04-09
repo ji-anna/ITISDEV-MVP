@@ -32,6 +32,20 @@ document.addEventListener('DOMContentLoaded', () => {
                         localStorage.setItem('rememberMe', JSON.stringify(rememberMeData));
                     }
     
+                    try {
+                        // Check for unpaid overtime before redirecting
+                        const res = await fetch('/api/reservations');
+                        if (!res.ok) throw new Error('Failed to fetch reservations');
+                        const reservations = await res.json();
+    
+                        const hasUnpaidOvertime = reservations.some(r => r.status === 'overtime');
+                        sessionStorage.setItem('hasUnpaidOvertime', hasUnpaidOvertime ? 'true' : 'false');
+                    } catch (err) {
+                        console.error('Reservation check error:', err);
+                        // Fallback: assume no unpaid overtime
+                        sessionStorage.setItem('hasUnpaidOvertime', 'false');
+                    }
+    
                     window.location.href = (user.role === 'technician') ? 'adminMenu' : 'mainMenu';
                 } else {
                     alert(user.message || 'Login failed!');
@@ -117,6 +131,17 @@ document.addEventListener('DOMContentLoaded', async () => {
             document.getElementById('anonymous').checked = reservation.anonymous;
         } catch (error) {
             console.error('Error fetching reservation details:', error);
+        }
+    }
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    const hasUnpaidOvertime = sessionStorage.getItem('hasUnpaidOvertime');
+
+    if (hasUnpaidOvertime === 'true') {
+        const noticeDiv = document.getElementById('overtimeWarning');
+        if (noticeDiv) {
+            noticeDiv.style.display = 'block';
         }
     }
 });
