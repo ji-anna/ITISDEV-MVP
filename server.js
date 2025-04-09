@@ -497,7 +497,7 @@ app.post('/submit-registration', async (req, res) => {
             role,
             department,
             profileImg,
-            carPlate: role === 'student' ? carPlate : undefined 
+            carPlate: (role === 'student' && carPlate) ? [carPlate] : []
         });
 
         await newUser.save();
@@ -885,26 +885,38 @@ app.get('/adminViewUser/:id', async (req, res) => {
 });
 
 
+// server.js
 app.post('/api/addCar', async (req, res) => {
     try {
       const { userId, plateNumber } = req.body;
-  
-      // Find the user by their userId
-      const user = await User.findOne({ userId: userId });
+      // 1. Find the user by their userId
+      const user = await User.findOne({ userId });
       if (!user) {
         return res.status(404).json({ message: 'User not found.' });
       }
   
-      // Update user's carPlate and save
-      user.carPlate = plateNumber;
+      // 2. Push the new plateNumber into the user's carPlates array
+      if (!user.carPlate) {
+        user.carPlate = [];
+      }
+      // Optionally check for duplicates before adding
+      if (user.carPlate.includes(plateNumber)) {
+        return res.status(400).json({ message: 'This plate number already exists.' });
+      }
+  
+      user.carPlate.push(plateNumber);
       await user.save();
   
-      return res.json({ message: 'Plate number updated successfully!' });
+      return res.json({
+        message: 'New plate number added successfully!',
+        carPlate: user.carPlate
+      });
     } catch (error) {
       console.error('Error updating car plate:', error);
       res.status(500).json({ message: 'Internal server error.' });
     }
   });
+  
   
   
 // DELETE ANOTHER USER'S RESERVATION (FOR ADMIN)

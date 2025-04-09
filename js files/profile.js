@@ -13,6 +13,14 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         const firstName = loggedInUser.name.split(' ')[0].toLowerCase();
         const profileImage = document.getElementById('profileImage');
+
+        const plateElement = document.getElementById('plateNumber');
+        if (Array.isArray(loggedInUser.carPlate)) {
+            plateElement.textContent = loggedInUser.carPlate.join(', ');
+        } else {
+            plateElement.textContent = '(No plates)';
+        }
+
         profileImage.src = `/assets/${firstName}.jpg`;
 
         profileImage.onerror = function () {
@@ -97,29 +105,36 @@ async function confirmAddCar() {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        userId: loggedInUser.userId, 
+        userId: loggedInUser.userId,
         plateNumber: newPlateNumber
       })
     });
 
     if (!response.ok) {
-      throw new Error('Failed to add new car plate. Server responded with an error.');
+      const errorData = await response.json();
+      throw new Error(errorData.message || 'Failed to add new car plate.');
     }
 
     const data = await response.json();
-    alert(data.message);  
+    alert(data.message); // e.g. 'New plate number added successfully!'
 
-    document.getElementById('plateNumber').textContent = newPlateNumber;
-    loggedInUser.carPlate = newPlateNumber;
+    // Update the user in sessionStorage with the new array of plates
+    loggedInUser.carPlate = data.carPlate; 
     sessionStorage.setItem('loggedInUser', JSON.stringify(loggedInUser));
 
+    // Update the DOM display
+    document.getElementById('plateNumber').textContent = data.carPlate.join(', ');
+
+    // Clear and hide form
     document.getElementById('newPlateNumber').value = '';
     document.getElementById('addCarForm').style.display = 'none';
+
   } catch (error) {
     console.error(error);
-    alert('Failed to save the plate number. Please try again.');
+    alert(error.message);
   }
 }
+
 
 cancelButton.addEventListener('click', async () => {
     const loggedInUser = JSON.parse(sessionStorage.getItem('loggedInUser'));

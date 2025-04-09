@@ -9,7 +9,7 @@ const userSchema = new mongoose.Schema({
     department: { type: String, required: true },
     profileImg: { type: String, default: '/assets/default.jpg' },
     profileDesc: { type: String, default: 'I am from DLSU' },
-    carPlate: { type: String, required: false },
+    carPlate: {type: [String], default: []},
 
     ticketCount: { type: Number, default: 0 } 
 });
